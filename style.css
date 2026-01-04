@@ -1,0 +1,130 @@
+/* --- CONFIGURAZIONE FACILE --- */
+:root {
+    --primary-color: #00d4ff; /* Colore "Neon AI" */
+    --secondary-color: #7000ff; /* Colore "Deep Space" */
+    --bg-dark: #05050a;
+    --text-light: #e0e0e0;
+    --glass: rgba(255, 255, 255, 0.05);
+}
+
+/* --- STILE GENERALE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, .logo {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- SFONDO STELLATO --- */
+#stars-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+#stars, #stars2 {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: white;
+    box-shadow: 200px 300px white, 500px 800px white, 1000px 200px white, 1500px 600px white;
+    animation: spaceMove 100s linear infinite;
+}
+
+@keyframes spaceMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(-2000px); }
+}
+
+/* --- LAYOUT --- */
+nav {
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.logo span { color: var(--primary-color); }
+
+nav ul { display: flex; list-style: none; }
+nav ul li { margin-left: 30px; }
+nav ul li a { color: white; text-decoration: none; font-weight: bold; transition: 0.3s; }
+nav ul li a:hover { color: var(--primary-color); }
+
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* --- CARDS & PROGETTI --- */
+.section { padding: 100px 10%; }
+
+.experience-card, .project-card {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    border-color: var(--primary-color);
+}
+
+.proj-meta { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
+
+/* --- BOTTONI --- */
+.btn {
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px;
+    display: inline-block;
+}
+
+.primary { background: var(--primary-color); color: black; }
+.secondary { border: 1px solid var(--primary-color); color: var(--primary-color); }
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    padding: 50px;
+    background: rgba(0,0,0,0.5);
+}
+
+.social-links a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--primary-color);
+}
