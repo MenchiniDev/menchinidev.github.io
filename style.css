@@ -236,3 +236,5 @@ footer {
     .hero h1 { font-size: 2rem; }
     .section { padding: 60px 5%; }
 }
+
+.experience-link { text-decoration: none; color: inherit; display: block; }
