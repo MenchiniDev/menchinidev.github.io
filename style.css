@@ -1,18 +1,12 @@
-/* --- CONFIGURAZIONE FACILE --- */
 :root {
-    --primary-color: #00d4ff; /* Colore "Neon AI" */
-    --secondary-color: #7000ff; /* Colore "Deep Space" */
-    --bg-dark: #05050a;
+    --primary-color: #00d4ff;
+    --secondary-color: #7000ff;
+    --bg-dark: #020205; /* Ancora più scuro */
     --text-light: #e0e0e0;
-    --glass: rgba(255, 255, 255, 0.05);
+    --glass: rgba(255, 255, 255, 0.03);
 }
 
-/* --- STILE GENERALE --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: var(--bg-dark);
@@ -22,109 +16,112 @@ body {
     scroll-behavior: smooth;
 }
 
-h1, h2, h3, .logo {
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
+h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
 
-/* --- SFONDO STELLATO --- */
+/* --- SFONDO STELLATO POTENZIATO --- */
 #stars-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    background: #010103;
 }
 
-#stars, #stars2 {
+#stars, #stars2, #stars3 {
     position: absolute;
-    width: 2px; height: 2px;
-    background: white;
-    box-shadow: 200px 300px white, 500px 800px white, 1000px 200px white, 1500px 600px white;
-    animation: spaceMove 100s linear infinite;
+    top: 0; left: 0;
+    background: transparent;
 }
 
-@keyframes spaceMove {
+/* Genera un effetto "polvere di stelle" */
+#stars { width: 1px; height: 1px; box-shadow: 455px 120px #FFF, 1200px 500px #FFF, 150px 800px #FFF, 900px 10px #FFF, 300px 400px #FFF, 1600px 900px #FFF; animation: moveStars 150s linear infinite; opacity: 0.5; }
+#stars2 { width: 2px; height: 2px; box-shadow: 200px 300px #FFF, 100px 10px #FFF, 1400px 600px #FFF, 800px 800px #FFF; animation: moveStars 100s linear infinite; opacity: 0.3; }
+#stars3 { width: 3px; height: 3px; box-shadow: 500px 100px #FFF, 1100px 200px #FFF, 400px 700px #FFF; animation: moveStars 70s linear infinite; opacity: 0.2; }
+
+@keyframes moveStars {
     from { transform: translateY(0); }
     to { transform: translateY(-2000px); }
 }
 
-/* --- LAYOUT --- */
+/* --- NAVBAR & HERO --- */
 nav {
     padding: 20px 50px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     position: fixed;
     width: 100%;
-    backdrop-filter: blur(10px);
     z-index: 100;
+    background: rgba(2, 2, 5, 0.8);
+    backdrop-filter: blur(10px);
 }
 
 .logo span { color: var(--primary-color); }
-
 nav ul { display: flex; list-style: none; }
-nav ul li { margin-left: 30px; }
-nav ul li a { color: white; text-decoration: none; font-weight: bold; transition: 0.3s; }
-nav ul li a:hover { color: var(--primary-color); }
+nav ul li { margin-left: 25px; }
+nav ul li a { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
 
-.hero {
-    height: 100vh;
+.hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+.tagline { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 20px; }
+
+/* --- PROJECT CARDS CON MEDIA --- */
+.section { padding: 80px 10%; }
+
+.project-card {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.tagline {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-}
-
-/* --- CARDS & PROGETTI --- */
-.section { padding: 100px 10%; }
-
-.experience-card, .project-card {
     background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 30px;
-    border-radius: 15px;
-    margin-top: 20px;
-    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    overflow: hidden; /* Taglia i media che escono */
+    position: relative;
+    transition: 0.4s;
 }
 
 .project-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
     border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
 }
 
-.proj-meta { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
-
-/* --- BOTTONI --- */
-.btn {
-    padding: 12px 30px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    margin: 10px;
-    display: inline-block;
+.project-info {
+    flex: 1;
+    padding: 40px;
+    z-index: 2;
 }
 
+.project-media {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.blurred-media {
+    width: 110%; /* Leggermente più grande per evitare bordi bianchi con il blur */
+    height: 110%;
+    object-fit: cover;
+    filter: blur(5px) grayscale(30%); /* Effetto sfocato e semi-desaturato */
+    opacity: 0.4; /* Lo rende discreto */
+    transition: 0.5s;
+}
+
+.project-card:hover .blurred-media {
+    filter: blur(2px) grayscale(0%);
+    opacity: 0.7;
+    transform: scale(1.05);
+}
+
+.proj-meta { color: var(--primary-color); font-weight: bold; margin-bottom: 15px; }
+
+/* --- BOTTONI & FOOTER --- */
+.btn { padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 10px; display: inline-block; transition: 0.3s; }
 .primary { background: var(--primary-color); color: black; }
 .secondary { border: 1px solid var(--primary-color); color: var(--primary-color); }
 
-/* --- FOOTER --- */
-footer {
-    text-align: center;
-    padding: 50px;
-    background: rgba(0,0,0,0.5);
-}
+footer { text-align: center; padding: 60px; background: #010103; border-top: 1px solid rgba(255,255,255,0.05); }
+.social-links a { color: white; margin: 0 15px; text-decoration: none; border-bottom: 1px solid var(--primary-color); padding-bottom: 5px; }
 
-.social-links a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    border-bottom: 1px solid var(--primary-color);
+@media (max-width: 768px) {
+    .project-card { flex-direction: column; }
+    .project-media { height: 200px; }
 }
