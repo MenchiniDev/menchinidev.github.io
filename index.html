@@ -130,5 +130,21 @@
     <script>
       AOS.init({ duration: 1000, once: true });
     </script>
+<script>
+
+    
+    // Gestione movimento mouse per lo sfondo dinamico
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        // Aggiorna le variabili CSS in tempo reale
+        document.documentElement.style.setProperty('--mouse-x', x + 'px');
+        document.documentElement.style.setProperty('--mouse-y', y + 'px');
+    });
+
+    // Inizializzazione AOS (già presente nel tuo codice)
+    AOS.init({ duration: 1000, once: true });
+</script>
 </body>
 </html>

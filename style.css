@@ -1,11 +1,15 @@
 /* --- CONFIGURAZIONE FACILE --- */
 :root {
-    --primary-color: #00d4ff; /* Neon Blue */
-    --secondary-color: #7000ff; /* Space Purple */
-    --bg-dark: #010103; /* Quasi nero assoluto */
+    --primary-color: #ff3c3c; /* Rosso vivo per accenti */
+    --secondary-color: #0047ab; /* Blu profondo */
+    --bg-dark: #010103; 
     --text-light: #e0e0e0;
     --glass: rgba(255, 255, 255, 0.03);
-    --card-height: 450px; /* Altezza fissa delle card progetti */
+    --card-height: 450px;
+    
+    /* Variabili per il mouse (gestite da JS) */
+    --mouse-x: 50%;
+    --mouse-y: 50%;
 }
 
 /* --- RESET & BASE --- */
@@ -34,7 +38,41 @@ h1, h2, h3 {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
-    background: radial-gradient(circle at center, #050510 0%, #010103 100%);
+    background: #010103;
+    overflow: hidden;
+}
+
+#stars-container::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 120%;
+    /* Gradiente verticale da rosso scuro a blu scuro */
+    background: linear-gradient(to bottom, 
+        rgba(139, 0, 0, 0.15) 0%, 
+        rgba(0, 0, 139, 0.15) 100%);
+    filter: blur(100px);
+    z-index: 0;
+}
+
+/* Il punto di luce che segue il mouse */
+#stars-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y), 
+        rgba(255, 60, 60, 0.15) 0%, 
+        rgba(0, 71, 171, 0.1) 40%, 
+        transparent 80%
+    );
+    z-index: 1;
+    pointer-events: none;
 }
 
 #stars, #stars2, #stars3 {
@@ -116,7 +154,11 @@ nav ul li a:hover { color: var(--primary-color); }
 
 /* --- SEZIONI GENERALI --- */
 .section { padding: 100px 10%; }
-h2 { font-size: 2.5rem; margin-bottom: 40px; border-left: 5px solid var(--primary-color); padding-left: 20px; }
+
+h2 { border-left: 5px solid var(--primary-color); }
+.logo span { color: var(--primary-color); text-shadow: 0 0 10px var(--primary-color); }
+.proj-meta { color: var(--primary-color); }
+.tech-tag { background: var(--primary-color); }
 
 /* --- PROJECT CARDS (IL CUORE DEL FIX) --- */
 .project-card {
@@ -199,11 +241,30 @@ h2 { font-size: 2.5rem; margin-bottom: 40px; border-left: 5px solid var(--primar
     font-family: 'Orbitron', sans-serif;
     font-size: 0.8rem;
 }
-.primary { background: var(--primary-color); color: #000; box-shadow: 0 0 15px rgba(0, 212, 255, 0.3); }
-.primary:hover { background: white; transform: scale(1.05); }
-.secondary { border: 1px solid var(--primary-color); color: var(--primary-color); }
-.secondary:hover { background: rgba(0, 212, 255, 0.1); }
 
+.primary { 
+    background: linear-gradient(135deg, var(--primary-color), #8b0000); 
+    color: white; 
+    border: none;
+    box-shadow: 0 0 20px rgba(255, 60, 60, 0.2);
+}
+
+.primary:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
+}
+
+.secondary { 
+    border: 1px solid var(--primary-color); 
+    color: var(--primary-color); 
+}
+
+/* Hover delle card che richiama la scia */
+.project-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 40px rgba(139, 0, 0, 0.2);
+}
 /* --- FOOTER --- */
 footer { 
     text-align: center; 
