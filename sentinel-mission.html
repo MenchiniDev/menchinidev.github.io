@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel-2 On-Board AI | From Orbit to the Edge</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        /* ---- Layout ---- */
+        .mission-header { padding: 140px 8% 30px; text-align: center; }
+        .mission-header h1 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.1; }
+        .smission { max-width: 1080px; margin: 0 auto; padding: 0 6% 120px; }
+        .back-btn { position: fixed; top: 25px; left: 25px; z-index: 1000; backdrop-filter: blur(10px); }
+        .tech-tag {
+            background: rgba(255,60,60,0.12); color: var(--primary-color);
+            border: 1px solid rgba(255,60,60,0.4);
+            padding: 5px 15px; border-radius: 20px; font-weight: bold;
+            font-size: 0.75rem; margin: 4px; display: inline-block;
+            letter-spacing: 1px; font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* ---- Section headers ---- */
+        .part-tag {
+            font-family: 'Orbitron', sans-serif; color: var(--primary-color);
+            font-size: 0.8rem; letter-spacing: 3px; display: block; margin-bottom: 8px;
+        }
+        .smission h2 {
+            font-family: 'Orbitron', sans-serif; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 1.7rem; border-left: 5px solid var(--primary-color);
+            padding-left: 18px; margin: 0 0 25px;
+        }
+        .smission h3 { color: var(--primary-color); font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem; letter-spacing: 1px; margin: 38px 0 14px; }
+        .smission p { line-height: 1.8; font-size: 1.05rem; color: var(--text-light); margin-bottom: 16px; }
+        .smission strong { color: #fff; }
+        .lead { font-size: 1.2rem !important; color: #cfd8e6 !important; }
+
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,60,60,0.5), transparent); margin: 90px 0 70px; }
+
+        /* ---- Stat band ---- */
+        .stat-band {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+            max-width: 1000px; margin: 40px auto 10px; padding: 0 6%;
+        }
+        .stat {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px; padding: 26px 16px; text-align: center;
+            transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .stat:hover { border-color: var(--primary-color); transform: translateY(-4px); box-shadow: 0 0 30px rgba(255,60,60,0.12); }
+        .stat .num { font-family: 'Orbitron', sans-serif; font-size: 2.1rem; font-weight: 700;
+            color: #fff; display: block; text-shadow: 0 0 20px rgba(255,60,60,0.35); }
+        .stat .num .unit { color: var(--primary-color); font-size: 1.3rem; }
+        .stat .lbl { font-size: 0.82rem; letter-spacing: 1px; color: #9fb0c4; text-transform: uppercase; margin-top: 6px; display: block; }
+
+        /* ---- Pipeline ---- */
+        .pipeline {
+            display: flex; align-items: stretch; gap: 0; flex-wrap: wrap;
+            justify-content: center; margin: 30px 0 10px;
+        }
+        .pnode {
+            flex: 1 1 130px; min-width: 120px; max-width: 175px;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 18px 12px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; z-index: 2;
+        }
+        .pnode .picon { font-size: 1.7rem; margin-bottom: 8px; }
+        .pnode .pttl { font-family:'Orbitron',sans-serif; font-size: 0.72rem; letter-spacing:1px; color:#fff; line-height:1.3; }
+        .pnode .psub { font-size: 0.78rem; color: var(--primary-color); margin-top: 6px; font-weight:600; }
+        .pconn { flex: 0 0 34px; align-self: center; height: 3px; position: relative; overflow: hidden;
+            background: rgba(255,255,255,0.08); border-radius: 3px; }
+        .pconn::after {
+            content:''; position:absolute; top:0; left:-40%; width:40%; height:100%;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            animation: flow 1.8s linear infinite;
+        }
+        @keyframes flow { from { left:-40%; } to { left:100%; } }
+        @media (max-width: 760px){
+            .pipeline { flex-direction: column; align-items: center; }
+            .pnode { max-width: 260px; width: 100%; }
+            .pconn { width: 3px; height: 26px; flex-basis: 26px; }
+            .pconn::after { left:0; top:-40%; width:100%; height:40%;
+                background: linear-gradient(180deg, transparent, var(--primary-color), transparent);
+                animation: flowv 1.8s linear infinite; }
+            @keyframes flowv { from{top:-40%;} to{top:100%;} }
+        }
+
+        /* ---- Figures ---- */
+        figure { margin: 26px 0; }
+        .fig-frame {
+            background: #0a0a12; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 14px; overflow: hidden; transition: 0.4s;
+        }
+        .fig-frame:hover { border-color: rgba(255,60,60,0.5); box-shadow: 0 0 34px rgba(0,0,0,0.5); }
+        .fig-frame img { width: 100%; display: block; border-radius: 8px; }
+        figcaption { font-size: 0.9rem; color: #9fb0c4; margin-top: 12px; text-align: center; line-height: 1.6; }
+        figcaption b { color: var(--primary-color); }
+        /* tall scrollable frame for predictions */
+        .scroll-frame { max-height: 560px; overflow-y: auto; }
+        .scroll-frame::-webkit-scrollbar { width: 8px; }
+        .scroll-frame::-webkit-scrollbar-thumb { background: rgba(255,60,60,0.4); border-radius: 8px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+        @media (max-width: 820px){ .grid-2 { grid-template-columns: 1fr; } .stat-band { grid-template-columns: repeat(2,1fr);} }
+
+        /* ---- Callout ---- */
+        .callout {
+            border-left: 3px solid var(--primary-color);
+            background: linear-gradient(90deg, rgba(255,60,60,0.07), transparent);
+            padding: 18px 22px; border-radius: 0 12px 12px 0; margin: 26px 0; font-size: 1.0rem;
+        }
+        .callout.blue { border-left-color: #38a0ff; background: linear-gradient(90deg, rgba(56,160,255,0.08), transparent); }
+        .callout .k { font-family:'Orbitron',sans-serif; font-size:0.72rem; letter-spacing:2px; color:var(--primary-color); display:block; margin-bottom:6px; }
+        .callout.blue .k { color:#38a0ff; }
+
+        /* ---- Result table ---- */
+        table.res { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.98rem; }
+        table.res th, table.res td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        table.res th { font-family:'Orbitron',sans-serif; font-size: 0.72rem; letter-spacing:1px; color:#9fb0c4; text-transform:uppercase; }
+        table.res td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+        table.res .hi { color: #4ade80; font-weight: 700; }
+        table.res .lo { color: var(--primary-color); font-weight: 700; }
+        table.res tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* ---- Band stack animation ---- */
+        .bandstack { display:flex; flex-direction:column; gap:5px; padding: 10px 0; }
+        .band { height: 13px; border-radius: 3px; transform-origin:left; animation: slidein .8s ease both; }
+        @keyframes slidein { from{ transform: scaleX(0); opacity:0;} to{transform:scaleX(1); opacity:1;} }
+
+        /* ---- Radiation bit-flip visual ---- */
+        .rad-demo { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin: 24px 0; }
+        @media (max-width:820px){ .rad-demo{ grid-template-columns:1fr; } }
+        .chip { background:#0a0a12; border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:20px; text-align:center; }
+        .chip h4 { font-family:'Orbitron',sans-serif; font-size:0.8rem; letter-spacing:1px; margin-bottom:14px; }
+        .bits { display:grid; grid-template-columns:repeat(8,1fr); gap:5px; max-width:230px; margin:0 auto 14px; }
+        .bit { aspect-ratio:1; border-radius:3px; background:#1a3a5c; }
+        .bit.on { background:#38a0ff; }
+        .bit.flip { animation: flip 1.4s infinite; }
+        @keyframes flip { 0%,100%{ background:#38a0ff; box-shadow:none;} 50%{ background:var(--primary-color); box-shadow:0 0 12px var(--primary-color);} }
+        .chip.fp .bit.flip { animation: flipfatal 1.4s infinite; }
+        @keyframes flipfatal { 0%,45%{ background:#38a0ff;} 50%{ background:var(--primary-color); box-shadow:0 0 16px var(--primary-color);} 55%,100%{ background:var(--primary-color); opacity:0.35;} }
+        .chip .verdict { font-size:0.9rem; color:#9fb0c4; }
+        .chip.fp .verdict b { color: var(--primary-color); }
+        .chip.int .verdict b { color:#4ade80; }
+
+        /* links */
+        .repo-links { display:flex; gap:16px; flex-wrap:wrap; margin-top: 30px; }
+        .stat .num.small { font-size: 1.7rem; }
+    </style>
+</head>
+<body>
+    <div id="stars-container"><div id="stars"></div><div id="stars2"></div><div id="stars3"></div></div>
+
+    <a href="index.html" class="btn secondary back-btn">← Back to Base</a>
+
+    <!-- ================= HERO ================= -->
+    <header class="mission-header" data-aos="fade-down">
+        <span class="part-tag">EARTH OBSERVATION · EDGE AI</span>
+        <h1>From Orbit to the Edge</h1>
+        <p class="tagline" style="font-size:1.4rem;">Sentinel-2 land-cover AI, trained on the ground and shrunk to fly</p>
+        <div style="margin-top: 22px; max-width:720px; margin-inline:auto;">
+            <span class="tech-tag">PyTorch</span>
+            <span class="tech-tag">Sentinel-2 · 13 bands</span>
+            <span class="tech-tag">U-Net / EfficientNet-B2</span>
+            <span class="tech-tag">ONNX Runtime</span>
+            <span class="tech-tag">INT8 Quantization</span>
+            <span class="tech-tag">C++</span>
+            <span class="tech-tag">Radiation Robustness</span>
+        </div>
+    </header>
+
+    <!-- ================= STAT BAND ================= -->
+    <div class="stat-band" data-aos="fade-up">
+        <div class="stat"><span class="num" data-target="0.936" data-dec="3"><span class="v">0</span></span><span class="lbl">mIoU · test set</span></div>
+        <div class="stat"><span class="num" data-target="13"><span class="v">0</span></span><span class="lbl">Spectral bands</span></div>
+        <div class="stat"><span class="num" data-target="3.8" data-dec="1"><span class="v">0</span><span class="unit">×</span></span><span class="lbl">Smaller (INT8)</span></div>
+        <div class="stat"><span class="num" data-target="1.43" data-dec="2"><span class="v">0</span><span class="unit">×</span></span><span class="lbl">Faster in C++</span></div>
+        <div class="stat"><span class="num" data-target="276"><span class="v">0</span></span><span class="lbl">Images / s · on CPU</span></div>
+        <div class="stat"><span class="num small" data-target="155"><span class="v">0</span></span><span class="lbl">KB · C++ binary</span></div>
+    </div>
+
+    <article class="smission">
+
+        <!-- ================= THE MISSION ================= -->
+        <section data-aos="fade-up">
+            <div class="divider" style="margin-top:60px;"></div>
+            <span class="part-tag">THE MISSION</span>
+            <h2>Bandwidth is the scarcest thing in orbit</h2>
+            <p class="lead">A satellite sees far more than it can ever send home. The link to the ground station is narrow and only open for minutes at a time, so most of what a sensor captures is thrown away before it is ever transmitted.</p>
+            <p>The alternative is to move the intelligence up with the sensor: run the neural network <strong>on board</strong>, and downlink answers instead of raw pixels. That is exactly what ESA's <strong>&phi;-sat</strong> missions do, classifying and filtering imagery directly on the satellite. But on-board hardware is unforgiving: a fixed, low-power processor, no cloud to fall back on, and a stream of cosmic radiation flipping bits in memory.</p>
+            <p>I built that whole chain myself, end to end: <strong>train an accurate land-cover model, then make it fit to fly</strong> by shrinking it, rewriting it in C++, benchmarking it, and stress-testing it against radiation. Both halves are below.</p>
+        </section>
+
+        <!-- ================= PIPELINE ================= -->
+        <section data-aos="fade-up">
+            <h3 style="text-align:center; color:#fff;">The end-to-end pipeline</h3>
+            <div class="pipeline">
+                <div class="pnode"><span class="picon">🛰️</span><span class="pttl">SENTINEL-2</span><span class="psub">13 bands</span></div>
+                <div class="pconn"></div>
+                <div class="pnode"><span class="picon">🧠</span><span class="pttl">U-NET<br>EfficientNet-B2</span><span class="psub">mIoU 0.936</span></div>
+                <div class="pconn"></div>
+                <div class="pnode"><span class="picon">📦</span><span class="pttl">ONNX FP32</span><span class="psub">38.3 MB</span></div>
+                <div class="pconn"></div>
+                <div class="pnode"><span class="picon">🗜️</span><span class="pttl">INT8 QUANTIZE</span><span class="psub">10.1 MB</span></div>
+                <div class="pconn"></div>
+                <div class="pnode"><span class="picon">⚙️</span><span class="pttl">C++ ENGINE</span><span class="psub">155 KB · no Python</span></div>
+                <div class="pconn"></div>
+                <div class="pnode"><span class="picon">☄️</span><span class="pttl">ON-BOARD</span><span class="psub">radiation-tested</span></div>
+            </div>
+            <figcaption>From raw multispectral pixels to a standalone binary that could actually run in orbit.</figcaption>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ================= PART 01 : SEGMENTATION ================= -->
+        <section data-aos="fade-up">
+            <span class="part-tag">PART 01 / SEGMENTATION</span>
+            <h2>Mapping land cover from Sentinel-2</h2>
+            <p>The task is <strong>semantic segmentation</strong>: label every pixel of a Sentinel-2 image with the kind of surface it shows, ten classes ranging from forest and water to industrial and residential. I trained on <strong>EuroSAT</strong>, 27,000 Copernicus Sentinel-2 patches spanning 34 European cities.</p>
+            <p>Crucially, I used <strong>all 13 spectral bands</strong>, not just the visible RGB. A satellite sees red-edge, near-infrared and short-wave infrared light that separates crops from pasture and water from shadow in ways the human eye never could.</p>
+
+            <figure class="fig-frame" data-aos="zoom-in">
+                <img src="./img/sentinel/eurosat_samples.png" alt="EuroSAT Sentinel-2 RGB patches across land cover classes">
+                <figcaption>A slice of <b>EuroSAT</b> rendered in true colour (bands 4-3-2). The model actually reads all thirteen bands at once, 64&times;64 px covering roughly 640&times;640 m of ground each.</figcaption>
+            </figure>
+
+            <h3>Architecture: adapting a pretrained encoder to 13 bands</h3>
+            <div class="grid-2">
+                <div>
+                    <p>The backbone is a <strong>U-Net with an EfficientNet-B2 encoder</strong> pretrained on ImageNet. The catch: ImageNet has 3 channels, Sentinel-2 has 13. I adapted the first convolution from 3 to 13 inputs by averaging the pretrained RGB weights and tiling them across every band, so the network keeps the benefit of pretraining instead of starting from scratch.</p>
+                    <p>Skip connections let the decoder fuse the high-level "what" from the bottleneck with the fine spatial "where" from early layers, the detail that makes crisp pixel masks possible.</p>
+                </div>
+                <div class="fig-frame" style="padding:22px;">
+                    <div style="font-family:'Orbitron';font-size:0.72rem;letter-spacing:1px;color:#9fb0c4;margin-bottom:10px;">13-BAND INPUT STACK</div>
+                    <div class="bandstack" id="bandstack"></div>
+                    <div style="font-size:0.8rem;color:#9fb0c4;margin-top:10px;line-height:1.5;">443 nm → 2190 nm · visible, red-edge, NIR &amp; SWIR fed into a single tensor <span style="color:#fff;">(13 × 64 × 64)</span>.</div>
+                </div>
+            </div>
+
+            <h3>Training</h3>
+            <p>Thirty epochs, AdamW with cosine-annealed learning rate, per-band normalisation, about 50 seconds per epoch on a single GPU. Validation tracks training closely, no dramatic overfitting, the model settling at a strong <strong>0.936 mIoU</strong> and 96.8% pixel accuracy on the held-out test set.</p>
+            <figure class="fig-frame" data-aos="zoom-in">
+                <img src="./img/sentinel/training_curves.png" alt="Training and validation loss, pixel accuracy and mIoU over 30 epochs">
+                <figcaption>Loss, pixel accuracy and mIoU across training. <b>Validation mIoU plateaus around 0.94</b> with train and val curves staying close.</figcaption>
+            </figure>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="margin-top:10px;">Predictions vs ground truth</h3>
+                    <p>Predictions line up with the ground truth across the full range of classes. The hardest cases, as expected, are the vegetated classes whose spectra overlap, <strong>Pasture</strong> and <strong>HerbaceousVegetation</strong>, while water and forest are near-perfect.</p>
+                    <table class="res">
+                        <tr><th>Class</th><th>IoU</th></tr>
+                        <tr><td>SeaLake</td><td class="hi">0.991</td></tr>
+                        <tr><td>Forest</td><td>0.973</td></tr>
+                        <tr><td>Residential</td><td>0.960</td></tr>
+                        <tr><td>River</td><td>0.956</td></tr>
+                        <tr><td>Highway</td><td>0.895</td></tr>
+                        <tr><td>Pasture</td><td class="lo">0.879</td></tr>
+                    </table>
+                </div>
+                <figure class="fig-frame scroll-frame" data-aos="zoom-in" style="margin-top:0;">
+                    <img src="./img/sentinel/predictions.png" alt="Predicted segmentation masks versus ground truth">
+                    <figcaption>Scroll · input, ground truth and prediction side by side.</figcaption>
+                </figure>
+            </div>
+
+            <div class="callout blue">
+                <span class="k">MEASURING mIoU</span>
+                Computing mIoU naively, averaging it batch by batch, silently drives the score toward zero on uniform-label patches, even while pixel accuracy looks fine. I accumulate a single <strong>global confusion matrix</strong> across the whole test set and derive per-class IoU from it, the only ordering-independent way to compute it.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ================= PART 02 : ON-BOARD ================= -->
+        <section data-aos="fade-up">
+            <span class="part-tag">PART 02 / ON-BOARD DEPLOYMENT</span>
+            <h2>Taking the model on-board</h2>
+            <p>A 0.936 mIoU model in a notebook is one thing. Getting it to run inside a satellite's power and compute budget is another. I exported the trained U-Net to <strong>ONNX</strong>, then quantised it from 32-bit floats to <strong>8-bit integers</strong> with static post-training quantization.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="margin-top:0;">The accuracy cost</h3>
+                    <p>INT8 makes the model <strong>3.8&times; smaller</strong> (38.3 → 10.1 MB) and faster, but it is not free. Post-training quantization costs <strong>18.6 mIoU points</strong>, concentrated exactly in those wide-spectrum classes that are hard to represent with a single 8-bit scale.</p>
+                    <p>This is the ceiling of <em>post-training</em> quantization, not the end of the road: the standard fix is <strong>quantization-aware training</strong>, and it would be the natural next iteration before any real deployment.</p>
+                </div>
+                <figure class="fig-frame" style="margin-top:0;">
+                    <img src="./img/sentinel/fp32_vs_int8.png" alt="Per-class IoU comparison between FP32 and INT8 models">
+                    <figcaption>Per-class IoU, <b>FP32 vs INT8</b>. The gap is small for water and forest, large for pasture.</figcaption>
+                </figure>
+            </div>
+
+            <h3>At batch 1, the CPU beats the GPU</h3>
+            <p>I built a standalone <strong>C++ ONNX Runtime engine</strong> (a 155 KB binary, no Python interpreter anywhere in the loop) and benchmarked every path. On-board inference happens one image at a time, and in that <strong>batch-1</strong> regime the GPU is a bad fit: it spends most of its time on launch and transfer overhead it never gets to amortise. ONNX Runtime on CPU beats PyTorch-on-GPU by roughly <strong>5&times;</strong>. The GPU only pulls ahead once the batch is large enough, a luxury a satellite processing one acquisition doesn't have.</p>
+
+            <figure class="fig-frame" data-aos="zoom-in">
+                <img src="./img/sentinel/benchmark.png" alt="Latency and throughput versus batch size for CPU and GPU backends">
+                <figcaption>Latency &amp; throughput vs batch size. At <b>batch 1</b> the quantized CPU path leads; the GPU's throughput only wins after the lines cross, near batch 8.</figcaption>
+            </figure>
+
+            <table class="res" data-aos="fade-up">
+                <tr><th>Backend (batch 1)</th><th>Latency</th><th>Throughput</th></tr>
+                <tr><td>PyTorch FP32 · GPU</td><td class="lo">14.68 ms</td><td>68 img/s</td></tr>
+                <tr><td>ONNX FP32 · CPU</td><td>2.74 ms</td><td>365 img/s</td></tr>
+                <tr><td>ONNX INT8 · CPU</td><td class="hi">2.19 ms</td><td class="hi">456 img/s</td></tr>
+                <tr><td>C++ INT8 · CPU (100 runs)</td><td>3.62 ms</td><td>276 img/s</td></tr>
+            </table>
+
+            <div class="divider" style="margin:70px 0 50px;"></div>
+
+            <!-- ===== RADIATION ===== -->
+            <span class="part-tag">PART 02 · CONTINUED</span>
+            <h2>What radiation does to a model in orbit</h2>
+            <p>In orbit a single charged particle can flip a bit in memory, a <strong>Single Event Upset</strong>. If that bit belongs to a network weight, the output changes. I modelled radiation as random bit-flips at a rising error rate, corrupted the weights, and re-measured accuracy. The difference between FP32 and INT8 is dramatic, and it runs the opposite way to what you'd guess.</p>
+
+            <div class="callout">
+                <span class="k">WHY INT8 SURVIVES</span>
+                An FP32 weight is 32 bits and exposes <strong>4&times; the target area</strong>; worse, a flip in the exponent can turn <code>0.03</code> into <code>1e38</code> and detonate the whole output. An INT8 weight is an integer with a fixed scale, so its <em>worst</em> case is a small, bounded error. Quantization turns out to be not just compression but a <strong>fault-tolerance mechanism</strong>.
+            </div>
+
+            <div class="rad-demo" data-aos="fade-up">
+                <div class="chip fp">
+                    <h4 style="color:var(--primary-color);">FP32 WEIGHT · 32 BITS</h4>
+                    <div class="bits" id="bitsFP"></div>
+                    <p class="verdict">Exponent bit flips → <b>catastrophic.</b> Dead at BER 1e-6.</p>
+                </div>
+                <div class="chip int">
+                    <h4 style="color:#4ade80;">INT8 WEIGHT · 8 BITS</h4>
+                    <div class="bits" id="bitsINT"></div>
+                    <p class="verdict">Bounded error → <b>graceful.</b> Still 0.745 mIoU at the same dose.</p>
+                </div>
+            </div>
+
+            <figure class="fig-frame" data-aos="zoom-in">
+                <img src="./img/sentinel/radiation_robustness.png" alt="mIoU versus bit error rate for FP32, INT8 and INT8 with selective TMR">
+                <figcaption><b>Left:</b> FP32 falls off a cliff while INT8 degrades gracefully, tolerating <b>2–3 orders of magnitude</b> more radiation. <b>Right:</b> triple-redundancy on just the 6 most fragile decoder layers shifts the curve right, buying back mIoU from 0.41 to <b>0.57</b> at a heavy dose.</figcaption>
+            </figure>
+
+            <p>A per-layer sensitivity scan showed the fragile weights all sit in the <strong>decoder, near the output</strong>, where an error has no downstream layers to absorb it. Protecting only those six of about fifty layers with triple-modular redundancy recovers most of the loss: <em>where</em> you spend redundancy matters more than how much.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ================= TAKEAWAYS ================= -->
+        <section data-aos="fade-up">
+            <span class="part-tag">FLIGHT LOG</span>
+            <h2>Summary</h2>
+            <table class="res">
+                <tr><td>Accuracy</td><td style="text-align:left;color:#cfd8e6;">0.936 mIoU across 13 bands and 10 classes, with a global, ordering-independent metric.</td></tr>
+                <tr><td>Compression</td><td style="text-align:left;color:#cfd8e6;">INT8 gives 3.8× smaller and faster, at a −18.6 mIoU cost, with QAT as the next step.</td></tr>
+                <tr><td>Deployment</td><td style="text-align:left;color:#cfd8e6;">A 155 KB C++ binary with no Python, and CPU beats GPU at batch 1.</td></tr>
+                <tr><td>Resilience</td><td style="text-align:left;color:#cfd8e6;">INT8 tolerates orders of magnitude more radiation; selective TMR hardens the few layers that matter.</td></tr>
+            </table>
+            <p style="margin-top:26px;">The whole chain runs on commodity hardware, from raw Copernicus pixels to a binary that could run in orbit, built end to end.</p>
+
+            <!-- TODO Lorenzo: when you push these two repos, replace the profile URL with the real repo links. -->
+            <div class="repo-links">
+                <a href="https://github.com/MenchiniDev" target="_blank" class="btn primary">Code on GitHub</a>
+                <a href="index.html" class="btn secondary">← Back to Base</a>
+            </div>
+        </section>
+
+    </article>
+
+    <footer id="contact" style="margin-top:0;">
+        <div class="social-links">
+            <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
+            <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/MenchiniDev" target="_blank">GitHub</a>
+        </div>
+        <p>&copy; 2026 Lorenzo Menchini. All systems operational.</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 900, once: true });
+
+        // ---- mouse-follow glow (matches index.html) ----
+        document.addEventListener('mousemove', (e) => {
+            document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+        });
+
+        // ---- 13-band spectral stack ----
+        (function(){
+            const colors = ['#3a0ca3','#4361ee','#4895ef','#4cc9f0','#48e5c2','#57cc99',
+                            '#80ed99','#c7f9cc','#ffd60a','#ff9e00','#ff6b35','#e5383b','#8b0000'];
+            const host = document.getElementById('bandstack');
+            colors.forEach((c,i)=>{
+                const d = document.createElement('div');
+                d.className = 'band';
+                d.style.background = c;
+                d.style.width = (55 + Math.random()*45) + '%';
+                d.style.animationDelay = (i*0.06) + 's';
+                host.appendChild(d);
+            });
+        })();
+
+        // ---- radiation bit grids ----
+        (function(){
+            function build(id, n, flipIdx){
+                const host = document.getElementById(id);
+                for(let i=0;i<n;i++){
+                    const b = document.createElement('div');
+                    b.className = 'bit' + (Math.random()>0.4?' on':'');
+                    if(i===flipIdx){ b.className = 'bit on flip'; }
+                    host.appendChild(b);
+                }
+            }
+            build('bitsFP', 32, 2);   // flip in the "exponent" region
+            build('bitsINT', 8, 5);
+        })();
+
+        // ---- animated stat counters ----
+        (function(){
+            const nums = document.querySelectorAll('.stat .num');
+            const setFinal = (el)=>{
+                const dec = parseInt(el.dataset.dec || '0');
+                el.querySelector('.v').textContent = parseFloat(el.dataset.target).toFixed(dec);
+            };
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if(reduce || !('IntersectionObserver' in window)){
+                nums.forEach(setFinal);
+                return;
+            }
+            const io = new IntersectionObserver((entries)=>{
+                entries.forEach(en=>{
+                    if(!en.isIntersecting) return;
+                    const el = en.target;
+                    io.unobserve(el);
+                    const target = parseFloat(el.dataset.target);
+                    const dec = parseInt(el.dataset.dec || '0');
+                    const vEl = el.querySelector('.v');
+                    const start = performance.now(), dur = 1400;
+                    function tick(now){
+                        const p = Math.min((now-start)/dur, 1);
+                        const eased = 1 - Math.pow(1-p, 3);
+                        vEl.textContent = (target*eased).toFixed(dec);
+                        if(p<1) requestAnimationFrame(tick);
+                    }
+                    requestAnimationFrame(tick);
+                });
+            }, { threshold: 0.5 });
+            nums.forEach(n=>io.observe(n));
+        })();
+    </script>
+</body>
+</html>
