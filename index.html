@@ -1,166 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lorenzo Menchini | Junior AI Engineer</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorenzo Menchini — AI Engineer</title>
+<meta name="description" content="Lorenzo Menchini — AI engineer working on autonomy for space: reinforcement learning for lunar rovers, on-board models for Earth observation, embedded systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="stars-container">
-        <div id="stars"></div>
-        <div id="stars2"></div>
-        <div id="stars3"></div>
+<div id="sky"><canvas id="starfield"></canvas></div>
+<div id="vignette"></div>
+<div id="grain"></div>
+
+<!-- ============================================================
+     ORBIT — lateral scroll-driven descent
+     ============================================================ -->
+<aside class="orbit" id="orbit" aria-hidden="true">
+  <svg viewBox="0 0 200 1000" preserveAspectRatio="xMidYMid meet">
+    <g id="shake">
+
+      <!-- planned trajectory (faint) & travelled trajectory (amber) -->
+      <path id="plan"  d="M 150 70 C 30 330 190 600 104 846"/>
+      <path id="trail" d=""/>
+
+      <!-- the Moon: a disc, nothing more -->
+      <g id="moon">
+        <circle id="moonDisc" cx="100" cy="890" r="56"/>
+        <circle class="ln" cx="100" cy="890" r="56"/>
+        <circle class="ln ln--faint" cx="76"  cy="906" r="17"/>
+        <circle class="ln ln--faint" cx="118" cy="922" r="9"/>
+        <circle class="ln ln--faint" cx="126" cy="866" r="12"/>
+        <g class="fill-bone" opacity="0.2">
+          <circle cx="84" cy="862" r="1.4"/><circle cx="106" cy="936" r="1.4"/>
+          <circle cx="60"  cy="880" r="1.4"/><circle cx="134" cy="900" r="1.4"/>
+        </g>
+      </g>
+
+      <!-- impact debris -->
+      <g id="debris" class="fill-bone" opacity="0"></g>
+
+      <!-- the capsule -->
+      <g id="rocket" opacity="0">
+        <g id="exhaust" class="ln ln--faint">
+          <path d="M -162 -12 q -26 12 0 24"/>
+          <path d="M -196 -22 q -34 22 0 44"/>
+        </g>
+        <path class="ln fill-void" d="M 0 0 C -16 -5 -32 -14 -48 -21 L -114 -21 C -133 -21 -144 -12 -144 0 C -144 12 -133 21 -114 21 L -48 21 C -32 14 -16 5 0 0 Z"/>
+        <path class="ln fill-void" d="M -104 -19 L -142 -46 L -148 -13 Z"/>
+        <path class="ln fill-void" d="M -104  19 L -142  46 L -148  13 Z"/>
+        <path class="ln ln--thin" d="M -48 -20 C -40 -7 -40 7 -48 20"/>
+        <circle class="ln" cx="-70" cy="0" r="9"/>
+      </g>
+
+      <text id="tele" class="tele" x="100" y="978" text-anchor="middle">000</text>
+    </g>
+  </svg>
+</aside>
+
+<nav class="nav" id="nav">
+    <a class="nav__mark" href="#top"><b>L. MENCHINI</b> <i>— AI / Space Autonomy</i></a>
+    <ul class="nav__links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#record">Record</a></li>
+        <li><a href="#payloads">Payloads</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="page">
+
+<!-- ============================================================
+     LEAD
+     ============================================================ -->
+<header class="lead" id="top">
+    <p class="lead__eyebrow">43.86°N 10.35°E — Italy</p>
+    <h1 class="lead__title">Lorenzo<br><em>Menchini</em></h1>
+    <p class="lead__sub">AI Engineer — Autonomy for Space</p>
+    <div class="lead__actions">
+        <a class="btn btn--solid" href="#record">Flight record</a>
+        <a class="btn" href="mailto:lorenzomenchini42@gmail.com">Get in touch</a>
     </div>
+    <div class="cue" id="cue">Scroll</div>
+</header>
 
-    <nav>
-        <div class="logo">LM<span>.AI</span></div>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-
-    <header class="hero">
-        <div class="hero-content" data-aos="fade-up">
-            <h1>Lorenzo Menchini</h1>
-            <p class="tagline">Junior AI Engineer</p>
-            <div class="cta-buttons">
-                <a href="#projects" class="btn primary">View Missions</a>
-                <a href="mailto:lorenzomenchini42@gmail.com" class="btn secondary">Contact Me</a>
-            </div>
-        </div>
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section class="section" id="about">
+    <header class="section__head" data-reveal>
+        <span class="section__index">01</span>
+        <h2 class="section__title">The Operator</h2>
     </header>
 
-    <section id="about" class="section">
-        <h2 data-aos="fade-right">About Me</h2>
-        <div class="about-grid">
-            <div class="about-text" data-aos="fade-up">
-                <p>I am a Computer Engineering student with a creative mindset and a technical approach. I love designing and building intelligent systems by combining software engineering and artificial intelligence.</p>
-                <p>Currently pursuing a <strong>Master's Degree in Artificial Intelligence and Data Engineering</strong> at the University of Pisa.</p>
-            </div>
-            <div class="skills-box" data-aos="fade-left">
-                <h3>Technical Stack</h3>
-                <p>Python, C++, Java, JavaScript, SQL/NoSQL</p>
-                <p>Embedded Systems, RAG, Agent Systems, Linux</p>
+    <div class="about">
+        <div data-reveal>
+            <p class="about__lead">I build systems that have to <em>decide on their own</em>, where nobody can reach them in time.</p>
+            <div class="about__body">
+                <p>Computer engineer with a creative streak and a stubbornly technical approach. I like the seam where software engineering meets artificial intelligence — agents that plan, models small enough to fly, hardware that must not fail.</p>
+                <p><strong>Master's Degree in Artificial Intelligence and Data Engineering</strong> at the University of Pisa</p>
+                <p>traineeship at the <strong>European Space Agency</strong></p>
             </div>
         </div>
-    </section>
 
-    <section id="experience" class="section">
-        <h2 data-aos="fade-right">Experience</h2>
-        <a href="esa-mission.html" class="experience-link">
-            <div class="project-card" data-aos="zoom-in">
-                <div class="project-info">
-                    <div class="experience-top-logo">
-                        <img src="./img/esa.png" alt="ESA Logo" style="width: 120px; margin-bottom: 15px; opacity: 0.9;">
-                    </div>
-                    
-                    <h3>Traineeship @ European Space Agency (ESA)</h3>
-                    <p class="proj-meta">Sept. 2025 - Feb. 2026</p>
-                    <p><strong>Lunar Rover Navigation Co-pilot:</strong> Development of an autonomous navigation system using Reinforcement Learning</p>
-                    <ul>
-                        <li>Training of intelligent agents in photo-realistic simulated environments</li>
-                        <li>Research on the crucial role of memory and world models for space autonomy</li>
+        <div class="specs" data-reveal>
+            <div class="specs__row"><span class="specs__key">Languages</span><span class="specs__val">Python · C++ · Java · Kotlin · JavaScript · SQL / NoSQL</span></div>
+            <div class="specs__row"><span class="specs__key">AI</span><span class="specs__val">Reinforcement Learning · World Models · Agent Systems · Self Supervised Learning</span></div>
+            <div class="specs__row"><span class="specs__key">Systems</span><span class="specs__val">Embedded · Edge Inference · Linux · Isaac Sim</span></div>
+            <div class="specs__row"><span class="specs__key">Status</span><span class="specs__val">Open to missions</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FLIGHT RECORD
+     ============================================================ -->
+<section class="section" id="record">
+    <header class="section__head" data-reveal>
+        <span class="section__index">02</span>
+        <h2 class="section__title">Flight Record</h2>
+    </header>
+
+    <div class="log">
+        <a class="entry" href="esa-mission.html" data-reveal>
+            <div class="entry__grid">
+                <div class="entry__num">R—01</div>
+                <div>
+                    <span class="entry__meta">Sept 2025 — Feb 2026 · ESA</span>
+                    <h3 class="entry__title">Lunar Rover Navigation Co-pilot</h3>
+                    <p class="entry__text">Traineeship at the <strong>European Space Agency</strong>: an autonomous navigation system for unstructured lunar terrain, built on reinforcement learning rather than a deterministic planner.</p>
+                    <ul class="entry__list">
+                        <li>Agents trained at scale in photo-realistic simulation</li>
+                        <li>Memory and world models as a functional requirement for space autonomy</li>
+                        <li>Validated on real volcanic regolite at the LUNA facility, EAC Cologne</li>
                     </ul>
-                    <span class="btn secondary" style="margin-top: 20px;">Explore Mission Details</span>
+                    <div class="entry__tags">
+                        <span class="tag">Isaac Sim</span><span class="tag">Recurrent PPO</span><span class="tag">TD-MPC2</span><span class="tag">Sim-to-Real</span>
+                    </div>
+                    <span class="entry__go"><span></span>Open mission file</span>
                 </div>
-
-                <div class="project-media">
-                    <video autoplay muted loop playsinline class="blurred-media">
+                <div class="entry__media">
+                    <video autoplay muted loop playsinline>
                         <source src="./img/odin.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
                 </div>
             </div>
         </a>
-    </section>
+    </div>
+</section>
 
-    <section id="projects" class="section">
-        <h2 data-aos="fade-right">Featured Projects</h2>
-        <div class="projects-container">
+<!-- ============================================================
+     PAYLOADS
+     ============================================================ -->
+<section class="section" id="payloads">
+    <header class="section__head" data-reveal>
+        <span class="section__index">03</span>
+        <h2 class="section__title">Payloads</h2>
+    </header>
 
-            <a href="sentinel-mission.html" class="experience-link">
-                <div class="project-card" data-aos="fade-up">
-                    <div class="project-info">
-                        <h3>Sentinel-2 On-Board AI — From Orbit to the Edge</h3>
-                        <p class="proj-meta">Earth Observation · Edge AI</p>
-                        <p><strong>The Mission:</strong> Train a Sentinel-2 land-cover segmentation model, then earn the right to fly it on a satellite.</p>
-                        <p><strong>The Work:</strong> 13-band U-Net at 0.936 mIoU, quantized to INT8, rewritten as a 155&nbsp;KB C++ engine, and stress-tested against orbital radiation.</p>
-                        <p><strong>Stack:</strong> PyTorch, ONNX Runtime, C++, INT8 quantization.</p>
-                        <span class="btn secondary" style="margin-top: 20px;">Explore Mission Details</span>
+    <div class="log">
+
+        <a class="entry" href="sentinel-mission.html" data-reveal>
+            <div class="entry__grid">
+                <div class="entry__num">P—01</div>
+                <div>
+                    <span class="entry__meta">Earth Observation · Edge AI</span>
+                    <h3 class="entry__title">From Orbit to the Edge</h3>
+                    <p class="entry__text">Train a Sentinel-2 land-cover segmentation model, then earn the right to fly it on a satellite.</p>
+                    <p class="entry__text">A 13-band U-Net at <strong>0.936 mIoU</strong>, quantized to INT8, rewritten as a <strong>155 KB</strong> C++ engine and stress-tested against orbital radiation.</p>
+                    <div class="entry__tags">
+                        <span class="tag">PyTorch</span><span class="tag">ONNX Runtime</span><span class="tag">INT8</span><span class="tag">C++</span>
                     </div>
-                    <div class="project-media">
-                        <img src="./img/sentinel/eurosat_samples.png" alt="Sentinel-2 land cover segmentation" class="blurred-media">
-                    </div>
+                    <span class="entry__go"><span></span>Open mission file</span>
                 </div>
-            </a>
-
-            <div class="project-card" data-aos="fade-up">
-                <div class="project-info">
-                    <h3>ADK Educational Multi-Agent Suite</h3>
-                    <p class="proj-meta">Google AI Hackathon 2025</p>
-                    <p><strong>The Mission:</strong> A modular backend suite built for advanced educational support.</p>
-                    <p><strong>Features:</strong> Socratic tutoring, exam planning, and continuous feedback loops.</p>
-                    <p><strong>Stack:</strong> Google’s Agent Development Kit (ADK), Python.</p>
-                </div>
-                <div class="project-media">
-                    <img src="./img/adk.png" alt="Carnival Project" class="blurred-media">
+                <div class="entry__media">
+                    <img src="./img/sentinel/eurosat_samples.png" alt="Sentinel-2 land cover samples">
                 </div>
             </div>
+        </a>
 
-            <div class="project-card" data-aos="fade-up" data-delay="100">
-                <div class="project-info">
-                    <h3>Cosa Stiamo Diventando</h3>
-                    <p class="proj-meta">Viareggio Carnival Control System</p>
-                    <p><strong>The Mission:</strong> Fault-tolerant embedded architecture for the 2nd place award-winning mask.</p>
-                    <p><strong>Features:</strong> Control of 14 MG 995 servomotors and Wii Nunchuk gesture integration.</p>
-                    <p><strong>Stack:</strong> ESP-12F, Arduino MEGA, C++, I2C, UART.</p>
+        <div class="entry" data-reveal>
+            <div class="entry__grid">
+                <div class="entry__num">P—02</div>
+                <div>
+                    <span class="entry__meta">Google AI Hackathon 2025</span>
+                    <h3 class="entry__title">ADK Multi-Agent Suite</h3>
+                    <p class="entry__text">A modular backend of cooperating agents built for advanced educational support — Socratic tutoring, exam planning and continuous feedback loops.</p>
+                    <div class="entry__tags">
+                        <span class="tag">Agent Development Kit</span><span class="tag">Python</span><span class="tag">Multi-Agent</span>
+                    </div>
                 </div>
-                <div class="project-media">
-                    <video autoplay muted loop playsinline class="blurred-media">
+                <div class="entry__media">
+                    <img src="./img/adk.png" alt="ADK multi-agent suite">
+                </div>
+            </div>
+        </div>
+
+        <div class="entry" data-reveal>
+            <div class="entry__grid">
+                <div class="entry__num">P—03</div>
+                <div>
+                    <span class="entry__meta">Viareggio Carnival · 2nd place</span>
+                    <h3 class="entry__title">Cosa Stiamo Diventando</h3>
+                    <p class="entry__text">A fault-tolerant embedded architecture driving an award-winning carnival mask: <strong>14 MG995 servomotors</strong>, gesture control over a Wii Nunchuk, and no option to reboot mid-parade.</p>
+                    <div class="entry__tags">
+                        <span class="tag">ESP-12F</span><span class="tag">Arduino MEGA</span><span class="tag">C++</span><span class="tag">I2C / UART</span>
+                    </div>
+                </div>
+                <div class="entry__media">
+                    <video autoplay muted loop playsinline>
                         <source src="./img/cosastiamodiventando.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
-
         </div>
-    </section>
 
-    <footer id="contact">
-        <h2>Initiate Contact</h2>
-        <div class="social-links">
-            <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
-            <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank">LinkedIn</a>
-            <a href="https://github.com/MenchiniDev" target="_blank">GitHub</a>
-        </div>
-        <p>&copy; 2026 Lorenzo Menchini. All systems operational.</p>
-    </footer>
+    </div>
+</section>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>
-      AOS.init({ duration: 1000, once: true });
-    </script>
-<script>
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<footer class="footer" id="contact">
+    <h2 class="footer__title" data-reveal>Open a <em>channel</em>.</h2>
+    <div class="footer__links" data-reveal>
+        <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/MenchiniDev" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="footer__base">
+        <span>© 2026 Lorenzo Menchini</span>
+        <span>All systems nominal</span>
+    </div>
+</footer>
 
-    
-    // Gestione movimento mouse per lo sfondo dinamico
-    document.addEventListener('mousemove', (e) => {
-        const x = e.clientX;
-        const y = e.clientY;
-        
-        // Aggiorna le variabili CSS in tempo reale
-        document.documentElement.style.setProperty('--mouse-x', x + 'px');
-        document.documentElement.style.setProperty('--mouse-y', y + 'px');
-    });
+</div><!-- /.page -->
 
-    // Inizializzazione AOS (già presente nel tuo codice)
-    AOS.init({ duration: 1000, once: true });
-</script>
+<script src="voyage.js"></script>
 </body>
 </html>
