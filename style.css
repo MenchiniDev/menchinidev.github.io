@@ -730,6 +730,465 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================
+   COSMOS — nebula, reticle, ticker, beacon
+   ========================================================= */
+
+/* --- legacy aliases used by the mission sub-pages --- */
+:root {
+    --primary-color: var(--amber);
+    --text-light:    var(--dust);
+    --glass:         rgba(232, 227, 217, 0.03);
+}
+
+/* --- nebula: two slow clouds behind the stars --- */
+#sky::before,
+#sky::after {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    pointer-events: none;
+    filter: blur(40px);
+}
+#sky::before {
+    background:
+        radial-gradient(38% 30% at 78% 22%, rgba(200, 137, 74, 0.10), transparent 70%),
+        radial-gradient(30% 26% at 18% 70%, rgba(92, 112, 160, 0.09), transparent 70%);
+    animation: nebula 70s ease-in-out infinite alternate;
+}
+#sky::after {
+    background:
+        radial-gradient(26% 22% at 60% 80%, rgba(150, 90, 120, 0.06), transparent 70%),
+        radial-gradient(22% 18% at 30% 20%, rgba(200, 137, 74, 0.05), transparent 70%);
+    animation: nebula 95s ease-in-out infinite alternate-reverse;
+}
+#sky canvas { position: relative; z-index: 1; }
+
+@keyframes nebula {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    100% { transform: translate(-4%, 3%) rotate(8deg) scale(1.12); }
+}
+
+/* --- nav clock --- */
+.nav__clock {
+    display: flex;
+    gap: 22px;
+    margin-left: auto;
+    margin-right: 46px;
+    color: var(--dust);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+}
+.nav__met { color: var(--amber); }
+@media (max-width: 1080px) { .nav__clock { display: none; } }
+
+.js .nav { animation: rise 1s var(--ease) both; }
+
+/* =========================================================
+   LEAD — ignition sequence
+   ========================================================= */
+
+
+.js .lead__eyebrow { animation: rise 1s var(--ease) 0.1s both; }
+.js .lead__sub     { animation: rise 1s var(--ease) 0.5s both; }
+.js .lead__actions { animation: rise 1s var(--ease) 0.7s both; }
+
+.lead__title .ch { display: inline-block; }
+.js .lead__title .ch {
+    opacity: 0;
+    transform: translateY(0.18em);
+    animation: ignite 0.9s var(--ease) forwards;
+    animation-delay: calc(0.2s + var(--i) * 30ms);
+}
+.lead__title em { text-shadow: 0 0 42px rgba(200, 137, 74, 0.35); }
+
+@keyframes ignite {
+    to { opacity: 1; transform: none; }
+}
+@keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   THE SYSTEM — scroll-driven flight between project worlds
+   ========================================================= */
+
+.voyage {
+    position: relative;
+    z-index: 2;
+    height: calc(100vh + 4 * 115vh);
+}
+@media (min-width: 1040px) {
+    /* full bleed: the descent strip steps aside while we are here */
+    .voyage { margin-right: calc(-1 * clamp(160px, 16vw, 240px)); }
+}
+
+.voyage__anchor { position: absolute; left: 0; width: 1px; height: 1px; }
+
+.voyage__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+}
+.voyage__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.voyage__hud {
+    position: absolute;
+    top: 86px;
+    left: var(--gutter);
+    right: var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dust);
+    pointer-events: none;
+    z-index: 1;
+}
+.voyage__hud span:first-child { color: var(--amber); }
+.voyage__hud b { font-weight: 400; color: var(--bone); margin-left: 8px; font-variant-numeric: tabular-nums; }
+
+.voyage__panels {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-items: center;
+    padding: 130px var(--gutter) 110px;
+    pointer-events: none;
+}
+/* a soft shadow behind the text column */
+.voyage__panels::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(8, 9, 11, 0.82) 0%, rgba(8, 9, 11, 0.45) 34%, transparent 58%);
+    pointer-events: none;
+}
+
+.vpanel {
+    grid-area: 1 / 1;
+    position: relative;
+    max-width: min(460px, 40vw);
+    opacity: 0;
+    visibility: hidden;
+    will-change: opacity, transform;
+}
+
+.vpanel__kicker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--dust);
+    margin-bottom: 26px;
+}
+.vpanel__kicker b { font-weight: 400; color: var(--amber); }
+.vpanel__kicker::after { content: ''; width: 40px; height: 1px; background: var(--line); }
+
+.vpanel__headline {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+}
+.vpanel__headline em { font-style: italic; color: var(--amber); }
+
+.vpanel__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+}
+
+.vpanel__text { color: var(--dust); font-size: 0.95rem; }
+.vpanel__text strong { color: var(--bone); font-weight: 400; }
+
+.vpanel .entry__list { font-size: 0.86rem; margin-top: 12px; }
+.vpanel .entry__list li { margin-top: 4px; }
+.vpanel .entry__tags { margin-top: 18px; }
+.vpanel .tag { border-color: rgba(232, 227, 217, 0.2); color: var(--bone); }
+
+.vpanel__media {
+    position: relative;
+    margin-top: 20px;
+    width: min(300px, 100%);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+.vpanel__media img,
+.vpanel__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%) brightness(0.85);
+}
+
+.vpanel .entry__go:hover { color: var(--amber); }
+.vpanel .entry__go:hover span { width: 46px; }
+
+/* --- mission rail --- */
+.voyage__rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 34px;
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 3vw, 40px);
+}
+.voyage__rail button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: 0;
+    padding: 6px;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dust);
+    cursor: pointer;
+    transition: color 0.4s var(--ease);
+}
+.voyage__rail i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1px solid var(--dust);
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.voyage__rail button:hover { color: var(--bone); }
+.voyage__rail button.is-on { color: var(--amber); }
+.voyage__rail button.is-on i { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 10px var(--amber); }
+
+@media (max-width: 760px) {
+    .voyage__hud { top: 74px; gap: 6px 16px; }
+    .voyage__hud span:nth-child(4) { display: none; }
+    .voyage__panels { align-items: end; padding: 0 var(--gutter) 100px; }
+    .voyage__panels::before { background: linear-gradient(0deg, rgba(8, 9, 11, 0.94) 0%, rgba(8, 9, 11, 0.7) 40%, transparent 62%); }
+    .vpanel { max-width: none; }
+    .vpanel__media, .vpanel .entry__list { display: none; }
+    .vpanel__kicker { margin-bottom: 14px; }
+    .vpanel__text { font-size: 0.88rem; line-height: 1.6; }
+    .vpanel .entry__tags { margin-top: 12px; }
+    .vpanel .entry__go { margin-top: 14px; }
+    .voyage__rail { bottom: 24px; }
+    .voyage__rail button { padding: 4px; font-size: 0.52rem; letter-spacing: 0.14em; }
+}
+
+/* =========================================================
+   TICKER
+   ========================================================= */
+
+.ticker {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    padding: 16px 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.ticker__track {
+    display: flex;
+    width: max-content;
+    animation: ticker 48s linear infinite;
+}
+.ticker span {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dust);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+}
+.ticker span::after {
+    content: '✦';
+    color: var(--amber);
+    margin: 0 2.4em;
+    font-size: 0.8em;
+}
+.ticker:hover .ticker__track { animation-play-state: paused; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* =========================================================
+   SECTIONS — the rule draws itself
+   ========================================================= */
+
+.section__head { position: relative; border-bottom-color: transparent; }
+.section__head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--amber), var(--line) 28%, var(--line));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.6s var(--ease) 0.2s;
+}
+.section__head.is-in::after { transform: scaleX(1); }
+
+.btn { transition: border-color 0.4s var(--ease), color 0.4s var(--ease), background 0.4s var(--ease), transform 0.5s var(--ease); }
+
+/* =========================================================
+   RETICLE CURSOR
+   ========================================================= */
+
+html.has-reticle,
+html.has-reticle * { cursor: none !important; }
+
+.reticle {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.reticle.is-gone { opacity: 0; }
+html:not(.has-reticle) .reticle { opacity: 0; }
+
+.reticle > * { position: absolute; top: 0; left: 0; will-change: transform; }
+
+.reticle__dot::before {
+    content: '';
+    position: absolute;
+    left: -2.5px; top: -2.5px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 10px var(--amber);
+}
+
+.reticle__ring::before,
+.reticle__ring::after {
+    content: '';
+    position: absolute;
+    left: -18px; top: -18px;
+    width: 36px; height: 36px;
+    transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), opacity 0.45s var(--ease);
+}
+.reticle__ring::before {
+    border-radius: 50%;
+    border: 1px solid rgba(232, 227, 217, 0.4);
+}
+/* four crosshair ticks */
+.reticle__ring::after {
+    --c: rgba(232, 227, 217, 0.7);
+    background:
+        linear-gradient(var(--c), var(--c)) 50% 0    / 1px 7px no-repeat,
+        linear-gradient(var(--c), var(--c)) 50% 100% / 1px 7px no-repeat,
+        linear-gradient(var(--c), var(--c)) 0 50%    / 7px 1px no-repeat,
+        linear-gradient(var(--c), var(--c)) 100% 50% / 7px 1px no-repeat;
+    transform: scale(1.35);
+}
+.reticle.is-lock .reticle__ring::before { transform: scale(1.55); border-color: var(--amber); }
+.reticle.is-lock .reticle__ring::after  { transform: scale(1.1) rotate(45deg); --c: var(--amber); }
+.reticle.is-down .reticle__ring::before { transform: scale(0.7); }
+
+.reticle__xy {
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--dust);
+    white-space: nowrap;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   FOOTER — transmission beacon
+   ========================================================= */
+
+.footer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 46px;
+}
+.footer__head .footer__title { margin-bottom: 0; }
+
+.beacon {
+    position: relative;
+    flex: none;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    border: 1px solid var(--amber-dim);
+    display: grid;
+    place-items: center;
+    transition: transform 0.5s var(--ease), background 0.4s var(--ease);
+}
+.beacon span {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    padding-left: 0.3em;
+    color: var(--amber);
+    transition: color 0.4s var(--ease);
+}
+.beacon i {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--amber);
+    opacity: 0;
+    animation: ping 3s var(--ease) infinite;
+}
+.beacon i:nth-child(2) { animation-delay: 1s; }
+.beacon i:nth-child(3) { animation-delay: 2s; }
+.beacon:hover { background: var(--amber); }
+.beacon:hover span { color: var(--void); }
+
+@keyframes ping {
+    0%   { transform: scale(1);   opacity: 0.7; }
+    100% { transform: scale(2.3); opacity: 0; }
+}
+
+.nominal { display: inline-flex; align-items: center; gap: 10px; }
+.nominal i {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #8fc79a;
+    box-shadow: 0 0 8px #8fc79a;
+    animation: blink 2.4s ease-in-out infinite;
+}
+@keyframes blink { 50% { opacity: 0.25; } }
+
+@media (max-width: 600px) {
+    .beacon { width: 70px; height: 70px; }
+}
+
+/* --- reduced motion: everything still, everything visible --- */
+@media (prefers-reduced-motion: reduce) {
+    #sky::before, #sky::after,
+    .ticker__track, .beacon i, .nominal i { animation: none !important; }
+    .js .lead__title .ch { animation: none !important; opacity: 1; transform: none; }
+    .ticker__track { flex-wrap: wrap; width: auto; }
+}
+
+/* =========================================================
    MOTION PREFERENCES
    ========================================================= */
 

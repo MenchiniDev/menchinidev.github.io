@@ -152,7 +152,8 @@
     </style>
 </head>
 <body>
-    <div id="stars-container"><div id="stars"></div><div id="stars2"></div><div id="stars3"></div></div>
+    <div id="sky"><canvas id="starfield"></canvas></div>
+    <div id="vignette"></div>
 
     <a href="index.html" class="btn secondary back-btn">← Back to Base</a>
 
@@ -447,5 +448,7 @@
             nums.forEach(n=>io.observe(n));
         })();
     </script>
+    <script src="voyage.js"></script>
+    <script src="cosmos.js"></script>
 </body>
 </html>

@@ -68,43 +68,95 @@
     var cv = $('starfield');
     if (!cv) return;
     var ctx = cv.getContext('2d');
-    var stars = [], W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var stars = [], shooters = [], W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    /* pointer parallax, eased */
+    var mx = 0, my = 0, tmx = 0, tmy = 0;
+    window.addEventListener('pointermove', function (e) {
+      tmx = e.clientX / window.innerWidth - 0.5;
+      tmy = e.clientY / window.innerHeight - 0.5;
+    }, { passive: true });
+
+    var nextShot = performance.now() + 4000 + Math.random() * 4000;
 
     function seed() {
       W = cv.clientWidth; H = cv.clientHeight;
       cv.width = W * dpr; cv.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.max(80, Math.min(Math.round((W * H) / 6000), 260));
+      var n = Math.max(110, Math.min(Math.round((W * H) / 4200), 380));
       stars = [];
       for (var i = 0; i < n; i++) {
+        var z = Math.pow(Math.random(), 1.6) * 0.9 + 0.1;   // depth: most stars far away
         stars.push({
           x: Math.random() * W,
           y: Math.random() * H,
-          r: Math.random() < 0.88 ? Math.random() * 0.75 + 0.22 : Math.random() * 1.2 + 0.8,
-          a: Math.random() * 0.45 + 0.15,
+          z: z,
+          r: z > 0.82 ? Math.random() * 1.1 + 0.9 : Math.random() * 0.7 + 0.2 + z * 0.35,
+          a: Math.random() * 0.45 + 0.18 + z * 0.25,
           s: Math.random() * 0.9 + 0.2,
-          p: Math.random() * Math.PI * 2
+          p: Math.random() * Math.PI * 2,
+          warm: Math.random() < 0.12
         });
       }
     }
 
+    function shoot() {
+      var fromLeft = Math.random() < 0.5;
+      var ang = (fromLeft ? 0.35 : Math.PI - 0.35) + (Math.random() - 0.5) * 0.3;
+      var sp = 9 + Math.random() * 7;
+      shooters.push({
+        x: fromLeft ? Math.random() * W * 0.5 : W * 0.5 + Math.random() * W * 0.5,
+        y: Math.random() * H * 0.45,
+        vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
+        life: 0, max: 50 + Math.random() * 30
+      });
+    }
+
     function draw(time) {
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#e8e3d9';
+      mx += (tmx - mx) * 0.04; my += (tmy - my) * 0.04;
+
+      var sy = window.scrollY || 0;
+
       for (var i = 0; i < stars.length; i++) {
         var st = stars[i];
-        var tw = reduced ? 1 : 0.65 + 0.35 * Math.sin(time * 0.0008 * st.s + st.p);
+        var px = st.x - mx * st.z * 46;
+        var py = st.y - my * st.z * 30 - sy * st.z * 0.12;
+        py = ((py % H) + H) % H;
+
+        var tw = reduced ? 1 : 0.6 + 0.4 * Math.sin(time * 0.0009 * st.s + st.p);
         ctx.globalAlpha = st.a * tw;
+        ctx.fillStyle = st.warm ? '#e7b27a' : '#e8e3d9';
         ctx.beginPath();
-        ctx.arc(st.x, st.y, st.r, 0, 6.2832);
+        ctx.arc(px, py, st.r, 0, 6.2832);
         ctx.fill();
+      }
+
+      /* shooting stars */
+      if (!reduced && time > nextShot) { shoot(); nextShot = time + 3500 + Math.random() * 6500; }
+      for (var j = shooters.length - 1; j >= 0; j--) {
+        var s = shooters[j];
+        s.life++; s.x += s.vx; s.y += s.vy;
+        var f = s.life / s.max;
+        if (f >= 1) { shooters.splice(j, 1); continue; }
+        var alpha = Math.sin(f * Math.PI);
+        var g = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * 9, s.y - s.vy * 9);
+        g.addColorStop(0, 'rgba(255,240,220,' + (0.9 * alpha).toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(200,137,74,0)');
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - s.vx * 9, s.y - s.vy * 9);
+        ctx.stroke();
       }
       ctx.globalAlpha = 1;
     }
 
     seed();
-    draw(0);
-    if (!reduced) { (function loop(t) { draw(t); requestAnimationFrame(loop); })(0); }
+    draw(reduced ? 0 : performance.now());
+    if (!reduced) { (function loop(t) { draw(t); requestAnimationFrame(loop); })(performance.now()); }
 
     var rt;
     window.addEventListener('resize', function () {
@@ -123,7 +175,7 @@
   var plan = $('plan'), trail = $('trail'), debris = $('debris'), tele = $('tele');
 
   /* trajectory — identical to #plan in the markup */
-  var A = P(150, 70), B = P(30, 330), C = P(190, 600), D = P(104, 846);
+  var A = P(152, 150), B = P(26, 380), C = P(190, 640), D = P(104, 842);
 
   /* timeline over the whole page scroll */
   var T = {
@@ -175,7 +227,7 @@
     moon.setAttribute('opacity', lerp(0.45, 1, inv(p, 0.35, 0.84)).toFixed(3));
     var ms = 1 + 0.014 * k;
     moon.setAttribute('transform',
-      'translate(100 ' + (890 + 2.5 * k).toFixed(2) + ') scale(' + ms.toFixed(4) + ') translate(-100 -890)');
+      'translate(100 ' + (884 + 2.5 * k).toFixed(2) + ') scale(' + ms.toFixed(4) + ') translate(-100 -884)');
 
     /* debris */
     var dp = inv(p, T.dust[0], T.dust[1]);

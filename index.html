@@ -24,19 +24,19 @@
     <g id="shake">
 
       <!-- planned trajectory (faint) & travelled trajectory (amber) -->
-      <path id="plan"  d="M 150 70 C 30 330 190 600 104 846"/>
+      <path id="plan"  d="M 152 150 C 26 380 190 640 104 842"/>
       <path id="trail" d=""/>
 
       <!-- the Moon: a disc, nothing more -->
       <g id="moon">
-        <circle id="moonDisc" cx="100" cy="890" r="56"/>
-        <circle class="ln" cx="100" cy="890" r="56"/>
-        <circle class="ln ln--faint" cx="76"  cy="906" r="17"/>
-        <circle class="ln ln--faint" cx="118" cy="922" r="9"/>
-        <circle class="ln ln--faint" cx="126" cy="866" r="12"/>
+        <circle id="moonDisc" cx="100" cy="884" r="68"/>
+        <circle class="ln" cx="100" cy="884" r="68"/>
+        <circle class="ln ln--faint" cx="72"  cy="902" r="20"/>
+        <circle class="ln ln--faint" cx="122" cy="922" r="11"/>
+        <circle class="ln ln--faint" cx="132" cy="858" r="14"/>
         <g class="fill-bone" opacity="0.2">
-          <circle cx="84" cy="862" r="1.4"/><circle cx="106" cy="936" r="1.4"/>
-          <circle cx="60"  cy="880" r="1.4"/><circle cx="134" cy="900" r="1.4"/>
+          <circle cx="82" cy="850" r="1.5"/><circle cx="104" cy="940" r="1.5"/>
+          <circle cx="52" cy="874" r="1.5"/><circle cx="140" cy="898" r="1.5"/>
         </g>
       </g>
 
@@ -63,6 +63,7 @@
 
 <nav class="nav" id="nav">
     <a class="nav__mark" href="#top"><b>L. MENCHINI</b> <i>— AI / Space Autonomy</i></a>
+    <div class="nav__clock" id="clock" aria-hidden="true"></div>
     <ul class="nav__links">
         <li><a href="#about">About</a></li>
         <li><a href="#record">Record</a></li>
@@ -77,9 +78,11 @@
      LEAD
      ============================================================ -->
 <header class="lead" id="top">
-    <p class="lead__eyebrow">43.86°N 10.35°E — Italy</p>
-    <h1 class="lead__title">Lorenzo<br><em>Menchini</em></h1>
-    <p class="lead__sub">AI Engineer — Autonomy for Space</p>
+
+
+    <p class="lead__eyebrow"><span data-decode="200">43.86°N 10.35°E — Italy</span></p>
+    <h1 class="lead__title" data-ignite>Lorenzo<br><em>Menchini</em></h1>
+    <p class="lead__sub"><span data-decode="500">AI Engineer — Autonomy for Space</span></p>
     <div class="lead__actions">
         <a class="btn btn--solid" href="#record">Flight record</a>
         <a class="btn" href="mailto:lorenzomenchini42@gmail.com">Get in touch</a>
@@ -88,12 +91,22 @@
 </header>
 
 <!-- ============================================================
+     TELEMETRY TICKER
+     ============================================================ -->
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        <span>Reinforcement Learning</span><span>World Models</span><span>Edge Inference</span><span>Isaac Sim</span><span>Sim-to-Real</span><span>Earth Observation</span><span>Embedded C++</span><span>Agent Systems</span>
+        <span>Reinforcement Learning</span><span>World Models</span><span>Edge Inference</span><span>Isaac Sim</span><span>Sim-to-Real</span><span>Earth Observation</span><span>Embedded C++</span><span>Agent Systems</span>
+    </div>
+</div>
+
+<!-- ============================================================
      ABOUT
      ============================================================ -->
 <section class="section" id="about">
     <header class="section__head" data-reveal>
         <span class="section__index">01</span>
-        <h2 class="section__title">The Operator</h2>
+        <h2 class="section__title" data-decode>The Operator</h2>
     </header>
 
     <div class="about">
@@ -116,108 +129,102 @@
 </section>
 
 <!-- ============================================================
-     FLIGHT RECORD
+     THE SYSTEM — every project is a planet; scrolling flies to it
      ============================================================ -->
-<section class="section" id="record">
-    <header class="section__head" data-reveal>
-        <span class="section__index">02</span>
-        <h2 class="section__title">Flight Record</h2>
-    </header>
+<section class="voyage" id="voyage">
 
-    <div class="log">
-        <a class="entry" href="esa-mission.html" data-reveal>
-            <div class="entry__grid">
-                <div class="entry__num">R—01</div>
-                <div>
-                    <span class="entry__meta">Sept 2025 — Feb 2026 · ESA</span>
-                    <h3 class="entry__title">Lunar Rover Navigation Co-pilot</h3>
-                    <p class="entry__text">Traineeship at the <strong>European Space Agency</strong>: an autonomous navigation system for unstructured lunar terrain, built on reinforcement learning rather than a deterministic planner.</p>
-                    <ul class="entry__list">
-                        <li>Agents trained at scale in photo-realistic simulation</li>
-                        <li>Memory and world models as a functional requirement for space autonomy</li>
-                        <li>Validated on real volcanic regolite at the LUNA facility, EAC Cologne</li>
-                    </ul>
-                    <div class="entry__tags">
-                        <span class="tag">Isaac Sim</span><span class="tag">Recurrent PPO</span><span class="tag">TD-MPC2</span><span class="tag">Sim-to-Real</span>
-                    </div>
-                    <span class="entry__go"><span></span>Open mission file</span>
-                </div>
-                <div class="entry__media">
-                    <video autoplay muted loop playsinline>
-                        <source src="./img/odin.mp4" type="video/mp4">
-                    </video>
-                </div>
-            </div>
-        </a>
-    </div>
-</section>
+    <span class="voyage__anchor" id="system" data-stop="0"></span>
+    <span class="voyage__anchor" id="record" data-stop="1"></span>
+    <span class="voyage__anchor" id="payloads" data-stop="2"></span>
+    <span class="voyage__anchor" data-stop="3"></span>
+    <span class="voyage__anchor" data-stop="4"></span>
 
-<!-- ============================================================
-     PAYLOADS
-     ============================================================ -->
-<section class="section" id="payloads">
-    <header class="section__head" data-reveal>
-        <span class="section__index">03</span>
-        <h2 class="section__title">Payloads</h2>
-    </header>
+    <div class="voyage__stage">
+        <canvas class="voyage__canvas" aria-hidden="true"></canvas>
 
-    <div class="log">
-
-        <a class="entry" href="sentinel-mission.html" data-reveal>
-            <div class="entry__grid">
-                <div class="entry__num">P—01</div>
-                <div>
-                    <span class="entry__meta">Earth Observation · Edge AI</span>
-                    <h3 class="entry__title">From Orbit to the Edge</h3>
-                    <p class="entry__text">Train a Sentinel-2 land-cover segmentation model, then earn the right to fly it on a satellite.</p>
-                    <p class="entry__text">A 13-band U-Net at <strong>0.936 mIoU</strong>, quantized to INT8, rewritten as a <strong>155 KB</strong> C++ engine and stress-tested against orbital radiation.</p>
-                    <div class="entry__tags">
-                        <span class="tag">PyTorch</span><span class="tag">ONNX Runtime</span><span class="tag">INT8</span><span class="tag">C++</span>
-                    </div>
-                    <span class="entry__go"><span></span>Open mission file</span>
-                </div>
-                <div class="entry__media">
-                    <img src="./img/sentinel/eurosat_samples.png" alt="Sentinel-2 land cover samples">
-                </div>
-            </div>
-        </a>
-
-        <div class="entry" data-reveal>
-            <div class="entry__grid">
-                <div class="entry__num">P—02</div>
-                <div>
-                    <span class="entry__meta">Google AI Hackathon 2025</span>
-                    <h3 class="entry__title">ADK Multi-Agent Suite</h3>
-                    <p class="entry__text">A modular backend of cooperating agents built for advanced educational support — Socratic tutoring, exam planning and continuous feedback loops.</p>
-                    <div class="entry__tags">
-                        <span class="tag">Agent Development Kit</span><span class="tag">Python</span><span class="tag">Multi-Agent</span>
-                    </div>
-                </div>
-                <div class="entry__media">
-                    <img src="./img/adk.png" alt="ADK multi-agent suite">
-                </div>
-            </div>
+        <div class="voyage__hud" aria-hidden="true">
+            <span>NAV</span>
+            <span>Target <b data-hud="target">System</b></span>
+            <span>Range <b data-hud="range">—</b></span>
+            <span>V <b data-hud="speed">0.0 km/s</b></span>
         </div>
 
-        <div class="entry" data-reveal>
-            <div class="entry__grid">
-                <div class="entry__num">P—03</div>
-                <div>
-                    <span class="entry__meta">Viareggio Carnival · 2nd place</span>
-                    <h3 class="entry__title">Cosa Stiamo Diventando</h3>
-                    <p class="entry__text">A fault-tolerant embedded architecture driving an award-winning carnival mask: <strong>14 MG995 servomotors</strong>, gesture control over a Wii Nunchuk, and no option to reboot mid-parade.</p>
-                    <div class="entry__tags">
-                        <span class="tag">ESP-12F</span><span class="tag">Arduino MEGA</span><span class="tag">C++</span><span class="tag">I2C / UART</span>
-                    </div>
-                </div>
-                <div class="entry__media">
-                    <video autoplay muted loop playsinline>
-                        <source src="./img/cosastiamodiventando.mp4" type="video/mp4">
-                    </video>
-                </div>
+        <div class="voyage__panels">
+
+            <div class="vpanel vpanel--intro" data-stop="0">
+                <span class="vpanel__kicker"><b>02</b> Flight Record &amp; Payloads</span>
+                <h2 class="vpanel__headline">Every mission<br>is a <em>world</em>.</h2>
+                <p class="vpanel__text">Four of them orbit this system. Keep scrolling to leave orbit and fly to each one.</p>
             </div>
+
+            <article class="vpanel" data-stop="1">
+                <span class="vpanel__kicker"><b>R—01</b> Flight Record</span>
+                <span class="entry__meta">Sept 2025 — Feb 2026 · ESA</span>
+                <h3 class="vpanel__title">Lunar Rover Navigation Co-pilot</h3>
+                <p class="vpanel__text">Traineeship at the <strong>European Space Agency</strong>: an autonomous navigation system for unstructured lunar terrain, built on reinforcement learning rather than a deterministic planner.</p>
+                <ul class="entry__list">
+                    <li>Agents trained at scale in photo-realistic simulation</li>
+                    <li>Memory and world models as a functional requirement for space autonomy</li>
+                    <li>Validated on real volcanic regolite at the LUNA facility, EAC Cologne</li>
+                </ul>
+                <div class="entry__tags">
+                    <span class="tag">Isaac Sim</span><span class="tag">Recurrent PPO</span><span class="tag">TD-MPC2</span><span class="tag">Sim-to-Real</span>
+                </div>
+                <div class="vpanel__media">
+                    <video muted loop playsinline preload="metadata"><source src="./img/odin.mp4" type="video/mp4"></video>
+                </div>
+                <a class="entry__go" href="esa-mission.html"><span></span>Open mission file</a>
+            </article>
+
+            <article class="vpanel" data-stop="2">
+                <span class="vpanel__kicker"><b>P—01</b> Payload</span>
+                <span class="entry__meta">Earth Observation · Edge AI</span>
+                <h3 class="vpanel__title">From Orbit to the Edge</h3>
+                <p class="vpanel__text">Train a Sentinel-2 land-cover segmentation model, then earn the right to fly it on a satellite. A 13-band U-Net at <strong>0.936 mIoU</strong>, quantized to INT8, rewritten as a <strong>155 KB</strong> C++ engine and stress-tested against orbital radiation.</p>
+                <div class="entry__tags">
+                    <span class="tag">PyTorch</span><span class="tag">ONNX Runtime</span><span class="tag">INT8</span><span class="tag">C++</span>
+                </div>
+                <div class="vpanel__media">
+                    <img src="./img/sentinel/eurosat_samples.png" alt="Sentinel-2 land cover samples" loading="lazy">
+                </div>
+                <a class="entry__go" href="sentinel-mission.html"><span></span>Open mission file</a>
+            </article>
+
+            <article class="vpanel" data-stop="3">
+                <span class="vpanel__kicker"><b>P—02</b> Payload</span>
+                <span class="entry__meta">Google AI Hackathon 2025</span>
+                <h3 class="vpanel__title">ADK Multi-Agent Suite</h3>
+                <p class="vpanel__text">A modular backend of cooperating agents built for advanced educational support — Socratic tutoring, exam planning and continuous feedback loops. Each moon in this orbit is one of them.</p>
+                <div class="entry__tags">
+                    <span class="tag">Agent Development Kit</span><span class="tag">Python</span><span class="tag">Multi-Agent</span>
+                </div>
+                <div class="vpanel__media">
+                    <img src="./img/adk.png" alt="ADK multi-agent suite" loading="lazy">
+                </div>
+            </article>
+
+            <article class="vpanel" data-stop="4">
+                <span class="vpanel__kicker"><b>P—03</b> Payload</span>
+                <span class="entry__meta">Viareggio Carnival · 2nd place</span>
+                <h3 class="vpanel__title">Cosa Stiamo Diventando</h3>
+                <p class="vpanel__text">A fault-tolerant embedded architecture driving an award-winning carnival mask: <strong>14 MG995 servomotors</strong>, gesture control over a Wii Nunchuk, and no option to reboot mid-parade.</p>
+                <div class="entry__tags">
+                    <span class="tag">ESP-12F</span><span class="tag">Arduino MEGA</span><span class="tag">C++</span><span class="tag">I2C / UART</span>
+                </div>
+                <div class="vpanel__media">
+                    <video muted loop playsinline preload="metadata"><source src="./img/cosastiamodiventando.mp4" type="video/mp4"></video>
+                </div>
+            </article>
+
         </div>
 
+        <nav class="voyage__rail" aria-label="Missions">
+            <button type="button" data-go="0"><i></i>System</button>
+            <button type="button" data-go="1"><i></i>R—01</button>
+            <button type="button" data-go="2"><i></i>P—01</button>
+            <button type="button" data-go="3"><i></i>P—02</button>
+            <button type="button" data-go="4"><i></i>P—03</button>
+        </nav>
     </div>
 </section>
 
@@ -225,7 +232,13 @@
      CONTACT
      ============================================================ -->
 <footer class="footer" id="contact">
-    <h2 class="footer__title" data-reveal>Open a <em>channel</em>.</h2>
+    <div class="footer__head" data-reveal>
+        <h2 class="footer__title">Open a <em>channel</em>.</h2>
+        <a class="beacon" href="mailto:lorenzomenchini42@gmail.com" aria-label="Send a transmission">
+            <i></i><i></i><i></i>
+            <span>TX</span>
+        </a>
+    </div>
     <div class="footer__links" data-reveal>
         <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank" rel="noopener">LinkedIn</a>
@@ -233,12 +246,14 @@
     </div>
     <div class="footer__base">
         <span>© 2026 Lorenzo Menchini</span>
-        <span>All systems nominal</span>
+        <span class="nominal"><i></i>All systems nominal</span>
     </div>
 </footer>
 
 </div><!-- /.page -->
 
 <script src="voyage.js"></script>
+<script src="cosmos.js"></script>
+<script src="system.js"></script>
 </body>
 </html>
