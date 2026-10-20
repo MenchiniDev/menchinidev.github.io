@@ -4,256 +4,81 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lorenzo Menchini — AI Engineer</title>
-<meta name="description" content="Lorenzo Menchini — AI engineer working on autonomy for space: reinforcement learning for lunar rovers, on-board models for Earth observation, embedded systems.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="description" content="Lorenzo Menchini — AI engineer: reinforcement learning, on-board models, embedded systems.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="sky"><canvas id="starfield"></canvas></div>
-<div id="vignette"></div>
-<div id="grain"></div>
-
-<!-- ============================================================
-     ORBIT — lateral scroll-driven descent
-     ============================================================ -->
-<aside class="orbit" id="orbit" aria-hidden="true">
-  <svg viewBox="0 0 200 1000" preserveAspectRatio="xMidYMid meet">
-    <g id="shake">
-
-      <!-- planned trajectory (faint) & travelled trajectory (amber) -->
-      <path id="plan"  d="M 152 150 C 26 380 190 640 104 842"/>
-      <path id="trail" d=""/>
-
-      <!-- the Moon: a disc, nothing more -->
-      <g id="moon">
-        <circle id="moonDisc" cx="100" cy="884" r="68"/>
-        <circle class="ln" cx="100" cy="884" r="68"/>
-        <circle class="ln ln--faint" cx="72"  cy="902" r="20"/>
-        <circle class="ln ln--faint" cx="122" cy="922" r="11"/>
-        <circle class="ln ln--faint" cx="132" cy="858" r="14"/>
-        <g class="fill-bone" opacity="0.2">
-          <circle cx="82" cy="850" r="1.5"/><circle cx="104" cy="940" r="1.5"/>
-          <circle cx="52" cy="874" r="1.5"/><circle cx="140" cy="898" r="1.5"/>
-        </g>
-      </g>
-
-      <!-- impact debris -->
-      <g id="debris" class="fill-bone" opacity="0"></g>
-
-      <!-- the capsule -->
-      <g id="rocket" opacity="0">
-        <g id="exhaust" class="ln ln--faint">
-          <path d="M -162 -12 q -26 12 0 24"/>
-          <path d="M -196 -22 q -34 22 0 44"/>
-        </g>
-        <path class="ln fill-void" d="M 0 0 C -16 -5 -32 -14 -48 -21 L -114 -21 C -133 -21 -144 -12 -144 0 C -144 12 -133 21 -114 21 L -48 21 C -32 14 -16 5 0 0 Z"/>
-        <path class="ln fill-void" d="M -104 -19 L -142 -46 L -148 -13 Z"/>
-        <path class="ln fill-void" d="M -104  19 L -142  46 L -148  13 Z"/>
-        <path class="ln ln--thin" d="M -48 -20 C -40 -7 -40 7 -48 20"/>
-        <circle class="ln" cx="-70" cy="0" r="9"/>
-      </g>
-
-      <text id="tele" class="tele" x="100" y="978" text-anchor="middle">000</text>
-    </g>
-  </svg>
-</aside>
-
-<nav class="nav" id="nav">
-    <a class="nav__mark" href="#top"><b>L. MENCHINI</b> <i>— AI / Space Autonomy</i></a>
-    <div class="nav__clock" id="clock" aria-hidden="true"></div>
-    <ul class="nav__links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#record">Record</a></li>
-        <li><a href="#payloads">Payloads</a></li>
-        <li><a href="#contact">Contact</a></li>
-    </ul>
-</nav>
-
-<div class="page">
-
-<!-- ============================================================
-     LEAD
-     ============================================================ -->
-<header class="lead" id="top">
-
-
-    <p class="lead__eyebrow"><span data-decode="200">43.86°N 10.35°E — Italy</span></p>
-    <h1 class="lead__title" data-ignite>Lorenzo<br><em>Menchini</em></h1>
-    <p class="lead__sub"><span data-decode="500">AI Engineer — Autonomy for Space</span></p>
-    <div class="lead__actions">
-        <a class="btn btn--solid" href="#record">Flight record</a>
-        <a class="btn" href="mailto:lorenzomenchini42@gmail.com">Get in touch</a>
-    </div>
-    <div class="cue" id="cue">Scroll</div>
-</header>
-
-<!-- ============================================================
-     TELEMETRY TICKER
-     ============================================================ -->
-<div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-        <span>Reinforcement Learning</span><span>World Models</span><span>Edge Inference</span><span>Isaac Sim</span><span>Sim-to-Real</span><span>Earth Observation</span><span>Embedded C++</span><span>Agent Systems</span>
-        <span>Reinforcement Learning</span><span>World Models</span><span>Edge Inference</span><span>Isaac Sim</span><span>Sim-to-Real</span><span>Earth Observation</span><span>Embedded C++</span><span>Agent Systems</span>
-    </div>
-</div>
-
-<!-- ============================================================
-     ABOUT
-     ============================================================ -->
-<section class="section" id="about">
-    <header class="section__head" data-reveal>
-        <span class="section__index">01</span>
-        <h2 class="section__title" data-decode>The Operator</h2>
-    </header>
-
-    <div class="about">
-        <div data-reveal>
-            <p class="about__lead">I build systems that have to <em>decide on their own</em>, where nobody can reach them in time.</p>
-            <div class="about__body">
-                <p>Computer engineer with a creative streak and a stubbornly technical approach. I like the seam where software engineering meets artificial intelligence — agents that plan, models small enough to fly, hardware that must not fail.</p>
-                <p><strong>Master's Degree in Artificial Intelligence and Data Engineering</strong> at the University of Pisa</p>
-                <p>traineeship at the <strong>European Space Agency</strong></p>
-            </div>
-        </div>
-
-        <div class="specs" data-reveal>
-            <div class="specs__row"><span class="specs__key">Languages</span><span class="specs__val">Python · C++ · Java · Kotlin · JavaScript · SQL / NoSQL</span></div>
-            <div class="specs__row"><span class="specs__key">AI</span><span class="specs__val">Reinforcement Learning · World Models · Agent Systems · Self Supervised Learning</span></div>
-            <div class="specs__row"><span class="specs__key">Systems</span><span class="specs__val">Embedded · Edge Inference · Linux · Isaac Sim</span></div>
-            <div class="specs__row"><span class="specs__key">Status</span><span class="specs__val">Open to missions</span></div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================
-     THE SYSTEM — every project is a planet; scrolling flies to it
-     ============================================================ -->
-<section class="voyage" id="voyage">
-
-    <span class="voyage__anchor" id="system" data-stop="0"></span>
-    <span class="voyage__anchor" id="record" data-stop="1"></span>
-    <span class="voyage__anchor" id="payloads" data-stop="2"></span>
-    <span class="voyage__anchor" data-stop="3"></span>
-    <span class="voyage__anchor" data-stop="4"></span>
-
-    <div class="voyage__stage">
-        <canvas class="voyage__canvas" aria-hidden="true"></canvas>
-
-        <div class="voyage__hud" aria-hidden="true">
-            <span>NAV</span>
-            <span>Target <b data-hud="target">System</b></span>
-            <span>Range <b data-hud="range">—</b></span>
-            <span>V <b data-hud="speed">0.0 km/s</b></span>
-        </div>
-
-        <div class="voyage__panels">
-
-            <div class="vpanel vpanel--intro" data-stop="0">
-                <span class="vpanel__kicker"><b>02</b> Flight Record &amp; Payloads</span>
-                <h2 class="vpanel__headline">Every mission<br>is a <em>world</em>.</h2>
-                <p class="vpanel__text">Four of them orbit this system. Keep scrolling to leave orbit and fly to each one.</p>
-            </div>
-
-            <article class="vpanel" data-stop="1">
-                <span class="vpanel__kicker"><b>R—01</b> Flight Record</span>
-                <span class="entry__meta">Sept 2025 — Feb 2026 · ESA</span>
-                <h3 class="vpanel__title">Lunar Rover Navigation Co-pilot</h3>
-                <p class="vpanel__text">Traineeship at the <strong>European Space Agency</strong>: an autonomous navigation system for unstructured lunar terrain, built on reinforcement learning rather than a deterministic planner.</p>
-                <ul class="entry__list">
-                    <li>Agents trained at scale in photo-realistic simulation</li>
-                    <li>Memory and world models as a functional requirement for space autonomy</li>
-                    <li>Validated on real volcanic regolite at the LUNA facility, EAC Cologne</li>
-                </ul>
-                <div class="entry__tags">
-                    <span class="tag">Isaac Sim</span><span class="tag">Recurrent PPO</span><span class="tag">TD-MPC2</span><span class="tag">Sim-to-Real</span>
-                </div>
-                <div class="vpanel__media">
-                    <video muted loop playsinline preload="metadata"><source src="./img/odin.mp4" type="video/mp4"></video>
-                </div>
-                <a class="entry__go" href="esa-mission.html"><span></span>Open mission file</a>
-            </article>
-
-            <article class="vpanel" data-stop="2">
-                <span class="vpanel__kicker"><b>P—01</b> Payload</span>
-                <span class="entry__meta">Earth Observation · Edge AI</span>
-                <h3 class="vpanel__title">From Orbit to the Edge</h3>
-                <p class="vpanel__text">Train a Sentinel-2 land-cover segmentation model, then earn the right to fly it on a satellite. A 13-band U-Net at <strong>0.936 mIoU</strong>, quantized to INT8, rewritten as a <strong>155 KB</strong> C++ engine and stress-tested against orbital radiation.</p>
-                <div class="entry__tags">
-                    <span class="tag">PyTorch</span><span class="tag">ONNX Runtime</span><span class="tag">INT8</span><span class="tag">C++</span>
-                </div>
-                <div class="vpanel__media">
-                    <img src="./img/sentinel/eurosat_samples.png" alt="Sentinel-2 land cover samples" loading="lazy">
-                </div>
-                <a class="entry__go" href="sentinel-mission.html"><span></span>Open mission file</a>
-            </article>
-
-            <article class="vpanel" data-stop="3">
-                <span class="vpanel__kicker"><b>P—02</b> Payload</span>
-                <span class="entry__meta">Google AI Hackathon 2025</span>
-                <h3 class="vpanel__title">ADK Multi-Agent Suite</h3>
-                <p class="vpanel__text">A modular backend of cooperating agents built for advanced educational support — Socratic tutoring, exam planning and continuous feedback loops. Each moon in this orbit is one of them.</p>
-                <div class="entry__tags">
-                    <span class="tag">Agent Development Kit</span><span class="tag">Python</span><span class="tag">Multi-Agent</span>
-                </div>
-                <div class="vpanel__media">
-                    <img src="./img/adk.png" alt="ADK multi-agent suite" loading="lazy">
-                </div>
-            </article>
-
-            <article class="vpanel" data-stop="4">
-                <span class="vpanel__kicker"><b>P—03</b> Payload</span>
-                <span class="entry__meta">Viareggio Carnival · 2nd place</span>
-                <h3 class="vpanel__title">Cosa Stiamo Diventando</h3>
-                <p class="vpanel__text">A fault-tolerant embedded architecture driving an award-winning carnival mask: <strong>14 MG995 servomotors</strong>, gesture control over a Wii Nunchuk, and no option to reboot mid-parade.</p>
-                <div class="entry__tags">
-                    <span class="tag">ESP-12F</span><span class="tag">Arduino MEGA</span><span class="tag">C++</span><span class="tag">I2C / UART</span>
-                </div>
-                <div class="vpanel__media">
-                    <video muted loop playsinline preload="metadata"><source src="./img/cosastiamodiventando.mp4" type="video/mp4"></video>
-                </div>
-            </article>
-
-        </div>
-
-        <nav class="voyage__rail" aria-label="Missions">
-            <button type="button" data-go="0"><i></i>System</button>
-            <button type="button" data-go="1"><i></i>R—01</button>
-            <button type="button" data-go="2"><i></i>P—01</button>
-            <button type="button" data-go="3"><i></i>P—02</button>
-            <button type="button" data-go="4"><i></i>P—03</button>
-        </nav>
-    </div>
-</section>
-
-<!-- ============================================================
-     CONTACT
-     ============================================================ -->
-<footer class="footer" id="contact">
-    <div class="footer__head" data-reveal>
-        <h2 class="footer__title">Open a <em>channel</em>.</h2>
-        <a class="beacon" href="mailto:lorenzomenchini42@gmail.com" aria-label="Send a transmission">
-            <i></i><i></i><i></i>
-            <span>TX</span>
-        </a>
-    </div>
-    <div class="footer__links" data-reveal>
+<header class="site-head">
+    <h1>Lorenzo Menchini</h1>
+    <p>AI Engineer · Italy</p>
+    <nav class="links">
         <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/MenchiniDev" target="_blank" rel="noopener">GitHub</a>
-    </div>
-    <div class="footer__base">
-        <span>© 2026 Lorenzo Menchini</span>
-        <span class="nominal"><i></i>All systems nominal</span>
-    </div>
+    </nav>
+</header>
+
+<main>
+
+<section id="about">
+    <p>I build systems that have to decide on their own, where nobody can reach them in time.</p>
+    <p>Computer engineer with a creative streak and a stubbornly technical approach. I like the seam where software engineering meets artificial intelligence — agents that plan, models small enough to run on the edge, hardware that must not fail.</p>
+    <p>Master's Degree in Artificial Intelligence and Data Engineering, University of Pisa. Traineeship at the European Space Agency.</p>
+
+    <ul class="facts">
+        <li><b>Languages</b><span>Python · C++ · Java · Kotlin · JavaScript · SQL / NoSQL</span></li>
+        <li><b>AI</b><span>Reinforcement Learning · World Models · Agent Systems · Self Supervised Learning</span></li>
+        <li><b>Systems</b><span>Embedded · Edge Inference · Linux · Isaac Sim</span></li>
+        <li><b>Status</b><span>Open to work</span></li>
+    </ul>
+</section>
+
+<section id="work">
+    <h2>Work</h2>
+    <ul class="work">
+
+        <li>
+            <h3><a href="esa-mission.html">Lunar Rover Navigation Co-pilot</a></h3>
+            <p class="meta">Sept 2025 — Feb 2026 · European Space Agency</p>
+            <p>Traineeship at the European Space Agency: an autonomous navigation system for unstructured lunar terrain, built on reinforcement learning rather than a deterministic planner. Agents trained at scale in photo-realistic simulation, with memory and world models, and validated on real volcanic regolith at the LUNA facility, EAC Cologne.</p>
+            <p class="tags">Isaac Sim · Recurrent PPO · TD-MPC2 · Sim-to-Real</p>
+        </li>
+
+        <li>
+            <h3><a href="sentinel-mission.html">From Orbit to the Edge</a></h3>
+            <p class="meta">Earth Observation · Edge AI</p>
+            <p>A Sentinel-2 land-cover segmentation model, trained and then made small enough to fly. A 13-band U-Net at 0.936 mIoU, quantized to INT8, rewritten as a 155 KB C++ engine and stress-tested against radiation.</p>
+            <p class="tags">PyTorch · ONNX Runtime · INT8 · C++</p>
+        </li>
+
+        <li>
+            <h3>ADK Multi-Agent Suite</h3>
+            <p class="meta">Google AI Hackathon 2025</p>
+            <p>A modular backend of cooperating agents built for advanced educational support — Socratic tutoring, exam planning and continuous feedback loops.</p>
+            <p class="tags">Agent Development Kit · Python · Multi-Agent</p>
+        </li>
+
+        <li>
+            <h3>Cosa Stiamo Diventando</h3>
+            <p class="meta">Viareggio Carnival · 2nd place</p>
+            <p>A fault-tolerant embedded architecture driving an award-winning carnival mask: 14 MG995 servomotors, gesture control over a Wii Nunchuk, and no option to reboot mid-parade.</p>
+            <p class="tags">ESP-12F · Arduino MEGA · C++ · I2C / UART</p>
+        </li>
+
+    </ul>
+</section>
+
+</main>
+
+<footer id="contact">
+    <nav class="links">
+        <a href="mailto:lorenzomenchini42@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/lorenzo-menchini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/MenchiniDev" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <span>© 2026 Lorenzo Menchini</span>
 </footer>
 
-</div><!-- /.page -->
-
-<script src="voyage.js"></script>
-<script src="cosmos.js"></script>
-<script src="system.js"></script>
 </body>
 </html>
