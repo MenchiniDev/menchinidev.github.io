@@ -57,6 +57,10 @@ code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .work .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 8px; }
 .work p { margin: 0 0 8px; }
 .work .tags { color: var(--muted); font-size: 0.9rem; margin: 0; }
+.work .media { display: block; margin: 14px 0 0; }
+.work .media img, .work .media video { display: block; width: 100%; height: auto; border-radius: 4px; }
+.work .media img { max-height: 340px; object-fit: cover; object-position: top; }
+.work .media.logo img { width: 96px; max-height: none; border-radius: 0; }
 
 footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 footer .links { margin: 0 0 8px; }
